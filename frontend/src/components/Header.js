@@ -2,9 +2,10 @@
 // 상단 구성
 
 import React from "react";
+import { Link } from "react-router-dom";
 
 // 추후 링크 연결
-function Header() {
+function Header( {page} ) {
     return(
         <div style = {styles.divstyle}>
             <header style = {styles.header}>
@@ -14,11 +15,23 @@ function Header() {
                     <a href="/profile">마이페이지</a>
                 </nav>
                 <div>
-                    <button style={styles.button1}>글쓰기</button>
-                    <button style={styles.button2}>로그인</button>
+                    {/* 글쓰기 버튼을 누르면 글쓰기 페이지로 이동 */}
+                    {page !== "articles" && 
+                    <Link to ="/articles"> <button style={styles.button1}>글쓰기</button> </Link>}
+
+                    {/* 글쓰기 페이지에서는 글등록 버튼만 존재 */}
+                    {page === "articles" ? 
+                        (<Link to ="/">
+                            <button style={styles.button2}>글등록</button>
+                        </Link> )
+                        : (<Link to ="/">
+                            <button style={styles.button2}>로그인</button>
+                        </Link>)
+                    }
                 </div>
-            </header>
+            </header>  
         </div>
+
     );
 }
 

@@ -3,37 +3,46 @@
 
 import React from "react";
 
-// 추후 벡엔드와 링크 연결
+// 추후 링크 연결
 function Header() {
     return(
-        <header style = {styles.header}>
-            <h1 style = {styles.title}>ProfileHelper</h1>
-            <nav style = {styles.nav}>
-                <a href="/">홈</a>
-                <a href="/profile">마이페이지</a>
-            </nav>
-            <div>
-                <button style={styles.button1}>글쓰기</button>
-                <button style={styles.button2}>로그인</button>
-            </div>
-        </header>
+        <div style = {styles.divstyle}>
+            <header style = {styles.header}>
+                <h1 style = {styles.title}>ProfileHelper</h1>
+                <nav style = {styles.nav}>
+                    <a href="/">홈</a>
+                    <a href="/profile">마이페이지</a>
+                </nav>
+                <div>
+                    <button style={styles.button1}>글쓰기</button>
+                    <button style={styles.button2}>로그인</button>
+                </div>
+            </header>
+        </div>
     );
 }
 
 const styles = {
+    divstyle : {
+        maxWidth: "1900px",
+        width:"180%"
+    },
     header: {
       display: "flex",
       alignItems: "center",
       padding: "10px",
       borderBottom: "1px solid #ddd",
     },
-    title: { margin: "0 400px"},
+    title: { 
+        margin: "0 400px",
+        flex:0,
+    },
     nav: { 
         display: "flex", 
         gap: "10px", 
         justifyContent: "flex-start",
         flex: 1,
-        marginLeft: "-300px"
+        marginLeft: "-300px",
     },
     button1: {
       marginRight: "10px",

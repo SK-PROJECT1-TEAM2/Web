@@ -21,11 +21,13 @@ function Board() {
     );
   }
 
-  const styles = {
-    boardContainer:{
-        padding: "30px 50px",
-        margin: "40px 350px", 
-    },
-  };
-  
-  export default Board;
+const styles = {
+  boardContainer:{
+      padding: "30px 50px",
+      margin: "40px 350px",
+      maxWidth: "1100px",
+      width: "100%", 
+  },
+};
+
+export default Board;

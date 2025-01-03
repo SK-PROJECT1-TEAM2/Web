@@ -23,21 +23,20 @@ function Header() {
 const styles = {
     header: {
       display: "flex",
-      justifyContent: "space-between",
       alignItems: "center",
-      padding: "10px 20px",
+      padding: "10px",
       borderBottom: "1px solid #ddd",
     },
-    title: { margin: 0 },
+    title: { margin: "0 400px"},
     nav: { 
         display: "flex", 
         gap: "10px", 
         justifyContent: "flex-start",
         flex: 1,
-        paddingLeft: "20px", 
+        marginLeft: "-300px"
     },
     button1: {
-      marginLeft: "10px",
+      marginRight: "10px",
       padding: "5px 10px",
       backgroundColor: "#007bff",
       color: "white",
@@ -46,7 +45,7 @@ const styles = {
       cursor: "pointer",
     },
     button2: {
-        marginLeft: "10px",
+        marginRight: "400px",
         padding: "5px 10px",
         backgroundColor: "white",
         color: "black",

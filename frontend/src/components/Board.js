@@ -24,8 +24,7 @@ function Board() {
   const styles = {
     boardContainer:{
         padding: "30px 50px",
-        border: "0.5px solid black",
-        margin: "40px 150px", 
+        margin: "40px 350px", 
     },
   };
   

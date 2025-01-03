@@ -24,17 +24,18 @@ const styles = {
   container: { marginBottom: "20px" },
   post: {
     display: "flex",
-    padding: "5px 0",
+    padding: "7px 0",
   },
   postTitle: {
-    flex: 1, // title을 왼쪽에 배치하고 나머지 공간을 차지
+    flex: 1, 
+    marginLeft : "-40px",
   },
   postDetails: {
     display: "flex",
-    gap: "10px", // time과 user 간의 간격
+    gap: "10px",
   },
   postTime: {
-    marginRight: "30px", // time을 왼쪽으로 밀기
+    marginRight: "30px",
   },
 };
 

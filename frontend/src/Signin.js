@@ -28,7 +28,7 @@ function Login() {
     return (
         <div style={styles.outerContainer}>
           <div style={styles.boxContainer}>
-            <h2>로그인</h2>
+            <h2 style={styles.title}>로그인</h2>
             <form onSubmit={handleLogin} style={styles.form}>
               
               <label htmlFor="email" style={styles.label}>Email</label>
@@ -53,18 +53,18 @@ function Login() {
               />
 
               <p style={styles.signupText}>
-                처음이신가요?{" "}
+                <span style={styles.signupQuestion}>처음이신가요?</span>
                 <button
                   type="button"
                   onClick={() => navigate("/signup")}
-                  style={styles.linkButton}
+                  style={styles.signupButton}
                 >
                   회원가입
                 </button>
               </p>
 
               <button type="submit" style={styles.button}>
-                로그인
+                Login
               </button>
             </form>
           </div>
@@ -81,19 +81,31 @@ function Login() {
       height: "100vh", 
       backgroundColor: "#ffffff",
       fontFamily: "'Noto Sans KR', sans-serif",
-       
     },
     boxContainer: {
       width: "auto",
-      minHeight: "600px", 
+      minWidth: "350px",
+      minHeight: "625px", 
       height: "auto", 
       maxHeight: "95vh", 
       aspectRatio: "500 / 950", 
       padding: "20px",
       backgroundColor: "#ffffff", 
-      border: "1.25px solid #ccc", 
+      border: "1.25px solid rgba(0, 0, 0, 0.2)", 
       textAlign: "center",
       fontFamily: "'Noto Sans KR', sans-serif",
+      display: "flex", 
+      flexDirection: "column", 
+      justifyContent: "center", 
+      alignItems: "center",
+    },
+    title: {
+      display: "flex",
+      fontFamily: "'Noto Sans KR', sans-serif",
+      fontSize: "30px",
+      fontWeight: "bold",
+      marginTop: "-50px",
+      marginBottom: "40px",
     },
     form: {
       display: "flex",
@@ -102,44 +114,56 @@ function Login() {
     },
     label: {
         fontSize: "16px",
-        marginBottom: "5px",
+        marginBottom: "1px",
         textAlign: "left",
-        width: "100%",
+        width: "120%",
         fontFamily: "'Noto Sans KR', sans-serif",
-        fontWeight: 700,
+        fontWeight: "Regular",
+        marginTop: "30px",
     },
     input: {
-      margin: "10px 0",
-      marginBottom: "40px",
+      margin: "5px 0",
+      marginBottom: "10px",
       padding: "10px",
       fontSize: "16px",
-      width: "100%",
+      width: "120%",
       fontFamily: "'Noto Sans KR', sans-serif",
-       
+      border: "1.25px solid rgba(4, 4, 4, 0.20)",
+      borderRadius: "5px",
     },
     button: {
       padding: "10px",
       backgroundColor: "#297BFF",
       color: "white",
       fontSize: "16px",
+      fontWeight: "bold",
       border: "none",
       borderRadius: "5px",
       cursor: "pointer",
-      width: "100%",
+      width: "130%",
       fontFamily: "'Noto Sans KR', sans-serif", 
     },
-    linkButton: {
-      color: "#007BFF",
+    signupText: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center", 
+      marginTop: "15px",
+      marginBottom:"80px",
+    },
+    signupQuestion: {
+      fontSize: "14px",
+      fontFamily: "'Noto Sans KR', sans-serif",
+    },
+    signupButton: {
+      fontSize: "15px",
+      color: "#000000",
+      fontWeight: "bold",
       background: "none",
       border: "none",
       cursor: "pointer",
       textDecoration: "underline",
-    },
-    signupText: {
-      display: "flex",
-      justifyContent: "center", 
-      marginTop: "3px",
-      marginBottom:"80px",
+      fontFamily: "'Noto Sans KR', sans-serif", 
     },
   };
   

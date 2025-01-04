@@ -1,13 +1,5 @@
 import './App.css';
-import {
-    useState,       
-    useEffect,      
-    useMemo,          
-    useCallback,   
-    useRef,        
-    useContext,
-    createContext,     
-} from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -41,7 +33,7 @@ function Signup() {
     return (
         <div style={styles.outerContainer}>
           <div style={styles.boxContainer}>
-            <h2>회원가입</h2>
+            <h2 style={styles.title}>회원가입</h2>
             <form onSubmit={handleSignup} style={styles.form}>
               <input
                 type="text"
@@ -73,18 +65,24 @@ function Signup() {
               <input
                 type="password"
                 name="confirmPassword"
-                placeholder="비밀번호를 다시 입력해주세요"
+                placeholder="Confirm Your Password"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 style={styles.input}
                 required
               />
-              <p>
-                이미 계정이 있으신가요?{" "}
-                <button onClick={() => navigate("/")} style={styles.linkButton}>
+
+              <p style={styles.signinText}>
+                <span style={styles.signinQuestion}>이미 계정이 있으신가요?</span>
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  style={styles.signinButton}
+                >
                   로그인
                 </button>
               </p>
+
               <button type="submit" style={styles.button}>
                 회원가입
               </button>
@@ -95,55 +93,87 @@ function Signup() {
   }
   
   
-const styles = {
+  const styles = {
     outerContainer: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh", 
-        backgroundColor: "#ffffff", 
-      },
-      boxContainer: {
-        width: "auto",
-        minHeight: "600px", 
-        height: "auto",
-        maxHeight: "95vh", 
-        aspectRatio: "500 / 950", 
-        padding: "20px",
-        backgroundColor: "#ffffff", 
-        border: "1.25px solid #ccc", 
-        textAlign: "center",
-      },
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh", 
+      backgroundColor: "#ffffff", 
+    },
+    boxContainer: {
+      width: "auto",
+      minWidth: "350px",
+      minHeight: "625px",
+      height: "auto",
+      maxHeight: "95vh",
+      aspectRatio: "500 / 950",
+      padding: "20px",
+      backgroundColor: "#ffffff",
+      border: "1.25px solid rgba(0, 0, 0, 0.2)",
+      textAlign: "center",
+      fontFamily: "'Noto Sans KR', sans-serif",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    title: {
+      display: "flex",
+      fontFamily: "'Noto Sans KR', sans-serif",
+      fontSize: "30px",
+      fontWeight: "bold",
+      marginTop: "-50px",
+      marginBottom: "40px",
+    },
     form: {
       display: "flex",
       flexDirection: "column",
-      width: "300px",
+      alignItems: "center",
     },
     input: {
+      margin: "8px 0",
       marginBottom: "10px",
       padding: "10px",
       fontSize: "16px",
-      border: "1px solid #ccc",
-      borderRadius: "4px",
+      width: "120%",
+      fontFamily: "'Noto Sans KR', sans-serif",
+      border: "1.25px solid rgba(4, 4, 4, 0.20)",
+      borderRadius: "5px",
     },
     button: {
       padding: "10px",
-      fontSize: "16px",
       backgroundColor: "#297BFF",
-      color: "#fff",
-      border: "none",
-      borderRadius: "4px",
-      cursor: "pointer",
-    },
-    linkButton: {
-      background: "none",
-      color: "#007BFF",
-      border: "none",
-      padding: "0",
+      color: "white",
       fontSize: "16px",
+      fontWeight: "bold",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      width: "130%",
+      fontFamily: "'Noto Sans KR', sans-serif",
+    },
+    signinText: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "15px",
+      marginBottom: "80px",
+    },
+    signinQuestion: {
+      fontSize: "14px",
+      fontFamily: "'Noto Sans KR', sans-serif",
+    },
+    signinButton: {
+      fontSize: "15px",
+      color: "#000000",
+      fontWeight: "bold",
+      background: "none",
+      border: "none",
       cursor: "pointer",
       textDecoration: "underline",
-      textAlign: "center"
+      fontFamily: "'Noto Sans KR', sans-serif",
     },
   };
   

@@ -1,13 +1,12 @@
-// 커스텀 컴포넌트, 홈페이지
-// 메인화면 구성 
-
 import './App.css';
 
 import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Header from "./components/Header";
-import Board from "./components/Board";
-import Article from "./pages/Article";
+import Header from "./Header";
+import MainBoard from "./MainBoard";
+import Article from "./Article";
+import Signin from './Signin';
+import Signup from './Signup';
 
 function App() {
   return (
@@ -20,8 +19,11 @@ function App() {
       </Routes>
       
       <Routes>
-        <Route path = "/" element={<Board />} />
+        <Route path = "/" element={<MainBoard />} />
         <Route path = "/articles" element={<Article />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        {/* 기타 페이지 추가 */}
       </Routes>  
     </Router>
   );

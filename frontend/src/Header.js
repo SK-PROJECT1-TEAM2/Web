@@ -4,15 +4,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// 추후 링크 연결
 function Header( {page} ) {
     return(
         <div style = {styles.divstyle}>
             <header style = {styles.header}>
                 <h1 style = {styles.title}>ProfileHelper</h1>
                 <nav style = {styles.nav}>
-                    <a href="/">홈</a>
-                    <a href="/profile">마이페이지</a>
+                    <Link to = "/">홈</Link>
+                    <Link to="/profile">마이페이지</Link>
                 </nav>
                 <div>
                     {/* 글쓰기 버튼을 누르면 글쓰기 페이지로 이동 */}
@@ -24,7 +23,7 @@ function Header( {page} ) {
                         (<Link to ="/">
                             <button style={styles.button2}>글등록</button>
                         </Link> )
-                        : (<Link to ="/">
+                        : (<Link to ="/signin">
                             <button style={styles.button2}>로그인</button>
                         </Link>)
                     }

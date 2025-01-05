@@ -1,6 +1,7 @@
 // 게시판 구성
 
-import React from "react";
+import React, {useState, useEffect} from "react";
+// import axios from "axios";
 import PostList from "./PostList";
 
 // 추후 벡엔드와 연결하여 동적으로 데이터를 받아옴
@@ -13,6 +14,28 @@ const companies = [
 ];
 
 function Board() {
+    /*
+      const [companies, setCompanies] = useState([]);
+      useEffect(() => {
+        // 백엔드 호출
+        axios.get("/api/companies")  
+          .then((response) => {
+            // 최신 글 3개 호출
+            const recentThree = response.data.map((company) => ({
+              ...company,
+              posts: company.posts
+                  .sort((a, b) => new Date(b.time) - new Date(a.time))
+                  .slice(0, 3),              
+            }));
+            setCompanies(recentThree);
+          })
+          .catch((error) => {
+            console.log("데이터 호출 오류 : ", error);
+          });
+      }, []);
+
+    */
+
     return (
       <div style={styles.boardContainer}>
         <h2>게시판</h2>

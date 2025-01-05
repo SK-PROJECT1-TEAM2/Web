@@ -3,7 +3,6 @@ import React from "react";
 function WritePage() {
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>글쓰기 창</h2>
       <div style={styles.editor}>
         <div style={styles.toolbar}>
           <select>
@@ -48,11 +47,12 @@ function WritePage() {
 
 const styles = {
   container: {
-    padding: "20px",
-    maxWidth: "800px",
-    margin: "0 auto",
-    border: "1px solid #ddd",
+    padding: "30px 50px",
+    margin: "40px 350px",
+    maxWidth: "1100px",
+    width: "100%",
   },
+
   title: {
     textAlign: "center",
   },

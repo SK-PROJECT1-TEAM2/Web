@@ -1,14 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
+import Header from "./Header"; 
 
-function WritePage() {
+function Article() { 
+  const [company, setCompany] = useState("");
+  const [alignment, setAlignment] = useState("left");
+
+  const handleCompanyChange = (e) => {
+    setCompany(e.target.value);
+  };
+
+  const handleAlignmentChange = (alignmentType) => {
+    setAlignment(alignmentType); 
+  };
+
   return (
-    <div style={styles.container}>
-      <div style={styles.editor}>
+    <div>
+      <Header page="articles" selectedCompany={company} />
+      <div style={styles.container}>
         <div style={styles.toolbar}>
-          <select>
-            <option>회사명 선택</option>
-            <option>회사1</option>
-            <option>회사2</option>
+          <select onChange={handleCompanyChange} value={company}>
+            <option value="">회사명 선택</option>
+            <option value="1">회사1</option>
+            <option value="2">회사2</option>
           </select>
           <select>
             <option>폰트 선택</option>
@@ -21,11 +34,18 @@ function WritePage() {
             <option>14px</option>
           </select>
           <div>
-            <button>B</button>
-            <button>I</button>
-            <button>U</button>
+          <button onClick={() => handleAlignmentChange("left")}>
+            <i className="fas fa-align-left" style={{ fontSize: "20px" }}></i>
+          </button>
+          <button onClick={() => handleAlignmentChange("center")}>
+            <i className="fas fa-align-center" style={{ fontSize: "20px" }}></i>
+          </button>
+          <button onClick={() => handleAlignmentChange("right")}>
+            <i className="fas fa-align-right" style={{ fontSize: "20px" }}></i>
+          </button>
           </div>
         </div>
+
         <input
           type="text"
           placeholder="제목을 입력하세요."
@@ -33,13 +53,15 @@ function WritePage() {
         />
         <textarea
           placeholder="내용을 입력하세요."
-          style={styles.textArea}
+          style={{ ...styles.textArea, textAlign: alignment }}
         ></textarea>
+
         <div style={styles.fileUpload}>
           <p>파일 첨부</p>
-          <input type="file" />
+          <input 
+            type="file" 
+          />
         </div>
-        <button style={styles.submitButton}>공유하기</button>
       </div>
     </div>
   );
@@ -49,27 +71,24 @@ const styles = {
   container: {
     padding: "30px 50px",
     margin: "40px 350px",
-    maxWidth: "1100px",
-    width: "100%",
-  },
-
-  title: {
-    textAlign: "center",
+    maxWidth: "1070px",
+    width: "93%",
   },
   toolbar: {
     display: "flex",
-    gap: "10px",
-    marginBottom: "10px",
+    gap: "20px",
+    marginBottom: "30px",
+    fontSize: "20px"
   },
   titleInput: {
     width: "100%",
     padding: "10px",
-    marginBottom: "10px",
-    fontSize: "16px",
+    marginBottom: "20px",
+    fontSize: "30px",
   },
   textArea: {
     width: "100%",
-    height: "200px",
+    height: "400px",
     padding: "10px",
     marginBottom: "10px",
   },
@@ -86,4 +105,4 @@ const styles = {
   },
 };
 
-export default WritePage;
+export default Article;

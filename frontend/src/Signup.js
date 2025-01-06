@@ -25,6 +25,8 @@ function Signup() {
         alert("비밀번호가 일치하지 않습니다.");
         return;
       }
+
+      // 백엔드로 데이터 전송하는 것 추가 필요
       alert(`회원가입 성공: ${formData.username}, ${formData.email}`);
       navigate("/signin");
     };

@@ -1,10 +1,12 @@
 // 헤더 컴포넌트
 // 상단 구성
 
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 
-function Header( {page} ) {
+function Header( {page, selectedCompany} ) {
+    const companyPage = `/company/${selectedCompany}`;
+
     return(
         <div style = {styles.divstyle}>
             <header style = {styles.header}>
@@ -20,7 +22,7 @@ function Header( {page} ) {
 
                     {/* 글쓰기 페이지에서는 글등록 버튼만 존재 */}
                     {page === "articles" ? 
-                        (<Link to ="/">
+                        (<Link to = {companyPage}>
                             <button style={styles.button2}>글등록</button>
                         </Link> )
                         : (<Link to ="/signin">

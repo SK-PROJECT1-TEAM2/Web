@@ -1,7 +1,7 @@
 // 헤더 컴포넌트
 // 상단 구성
 
-import React, {useState} from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 function Header( {page, selectedCompany} ) {

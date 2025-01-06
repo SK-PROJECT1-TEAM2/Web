@@ -4,6 +4,7 @@ import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Header from "./Header";
 import MainBoard from "./MainBoard";
+import Profile from "./Profile";
 import Article from "./Article";
 import Signin from './Signin';
 import Signup from './Signup';
@@ -19,11 +20,13 @@ function App() {
       {/* 경로마다 다른 Header가 보이도록 렌더링 */}
       <Routes>
         <Route path="/" element={<Header page="home" />} />
+        <Route path="/profile" element={<Header page="my" />} />
         {/* 기타 경로 추가 */}
       </Routes>
       
       <Routes>
-        <Route path = "/" element={<MainBoard />} />
+        <Route path = "/" element={<MainBoard />} />\
+        <Route path = "/profile" element={<Profile/>} />
         <Route path = "/articles" element={<Article />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />

@@ -22,6 +22,7 @@ function Article() {
             <option value="">회사명 선택</option>
             <option value="1">회사1</option>
             <option value="2">회사2</option>
+            <option value="3">회사3</option>
           </select>
           <select>
             <option>폰트 선택</option>

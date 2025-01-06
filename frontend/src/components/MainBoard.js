@@ -8,9 +8,9 @@ import PostList from "./PostList";
 // useEffect, useState 훅 사용
 // axios 라이브러리를 통한 통신
 const companies = [
-    { name: "회사1", posts: [{ title: "글1", time: "12:34", user: "username1" }, { title: "글2", time: "12:33", user: "username2" }, { title: "글3", time: "12:32", user: "username3" }] },
-    { name: "회사2", posts: [{ title: "글1", time: "12:34", user: "username1" }, { title: "글2", time: "12:33", user: "username2" }, { title: "글3", time: "12:32", user: "username3" }] },
-    { name: "회사3", posts: [{ title: "글1", time: "12:34", user: "username1" }, { title: "글2", time: "12:33", user: "username2" }, { title: "글3", time: "12:32", user: "username3" }] },
+    {id:1, name: "회사1", posts: [{ title: "글1-1", time: "12:34", user: "username1" }, { title: "글2-1", time: "12:33", user: "username2" }, { title: "글3-1", time: "12:32", user: "username3" }] },
+    {id:2, name: "회사2", posts: [{ title: "글1-2", time: "12:34", user: "username1" }, { title: "글2-2", time: "12:33", user: "username2" }, { title: "글3-2", time: "12:32", user: "username3" }] },
+    {id:3, name: "회사3", posts: [{ title: "글1-3", time: "12:34", user: "username1" }, { title: "글2-3", time: "12:33", user: "username2" }, { title: "글3-3", time: "12:32", user: "username3" }] },
 ];
 
 function Board() {
@@ -51,7 +51,7 @@ const styles = {
       padding: "30px 50px",
       margin: "40px 350px",
       maxWidth: "1100px",
-      width: "100%", 
+      width: "95%", 
   },
 };
 

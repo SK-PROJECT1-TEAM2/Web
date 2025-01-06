@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Header from "./components/Header";
 import MainBoard from "./components/MainBoard";
 import Profile from "./components/Profile";
-import Article from "./components/Article";
+import WritePage from "./components/WritePage";
 import Company from "./components/Company";
 import Signin from './components/Signin';
 import Signup from './components/Signup';
@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path = "/" element={<MainBoard />} />\
         <Route path = "/profile" element={<Profile/>} />
-        <Route path = "/articles" element={<Article />} />
+        <Route path = "/writepage" element={<WritePage />} />
         {/* 회사 id를 동적으로 처리 */}
         <Route path = "/company/:id" element={<Company />} />
         <Route path="/signin" element={<Signin />} />

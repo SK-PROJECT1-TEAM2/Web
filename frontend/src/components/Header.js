@@ -17,11 +17,11 @@ function Header( {page, selectedCompany} ) {
                 </nav>
                 <div>
                     {/* 글쓰기 버튼을 누르면 글쓰기 페이지로 이동 */}
-                    {page !== "articles" && 
-                    <Link to ="/articles"> <button style={styles.button1}>글쓰기</button> </Link>}
+                    {page !== "writepage" && 
+                    <Link to ="/writepage"> <button style={styles.button1}>글쓰기</button> </Link>}
 
                     {/* 글쓰기 페이지에서는 글등록 버튼만 존재 */}
-                    {page === "articles" ? 
+                    {page === "writepage" ? 
                         (<Link to = {companyPage}>
                             <button style={styles.button2}>글등록</button>
                         </Link> )

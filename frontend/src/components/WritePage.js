@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Header from "./Header"; 
 
-function Article() { 
+function WritePage() { 
   const [company, setCompany] = useState("");
   const [alignment, setAlignment] = useState("left");
 
@@ -15,7 +15,7 @@ function Article() {
 
   return (
     <div>
-      <Header page="articles" selectedCompany={company} />
+      <Header page="writepage" selectedCompany={company} />
       <div style={styles.container}>
         <div style={styles.toolbar}>
           <select onChange={handleCompanyChange} value={company}>
@@ -106,4 +106,4 @@ const styles = {
   },
 };
 
-export default Article;
+export default WritePage;

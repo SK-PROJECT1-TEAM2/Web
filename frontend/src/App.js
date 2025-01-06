@@ -2,12 +2,12 @@ import './App.css';
 
 import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Header from "./Header";
-import MainBoard from "./MainBoard";
-import Profile from "./Profile";
-import Article from "./Article";
-import Signin from './Signin';
-import Signup from './Signup';
+import Header from "./components/Header";
+import MainBoard from "./components/MainBoard";
+import Profile from "./components/Profile";
+import Article from "./components/Article";
+import Signin from './components/Signin';
+import Signup from './components/Signup';
 
 
 // 로그인 전에는 "/"에서 로그인 버튼이, 로그인 후에는 "/"에서 로그아웃 버튼이 나오게 설정

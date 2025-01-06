@@ -40,6 +40,15 @@ public class User implements UserDetails {
     @Column
     private LocalDateTime updated_at; // 수정 시간
 
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts; // 사용자가 작성한 게시물들
+
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments; // 사용자가 작성한 댓글들
+
+    @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Mentor> mentors; // 사용자가 멘토로 등록된 경우
+
 
     // 생성자 + 빌더
     @Builder

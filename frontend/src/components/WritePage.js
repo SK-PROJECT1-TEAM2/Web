@@ -3,14 +3,38 @@ import Header from "./Header";
 
 function WritePage() { 
   const [company, setCompany] = useState("");
-  const [alignment, setAlignment] = useState("left");
+  const [file, setFile] = useState(null);
+  const [formData, setFormData] = useState ({
+    alignment: "left",
+    title: "",
+    content: "",
+    font: "폰트 선택",
+    fontSize: "크기 선택",
+  });
 
   const handleCompanyChange = (e) => {
     setCompany(e.target.value);
   };
 
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFontChange = (e) => {
+    setFormData({ ...formData, font: e.target.value });
+  };
+
+  const handleFontSizeChange = (e) => {
+    setFormData({ ...formData, fontSize: e.target.value });
+  };
+
   const handleAlignmentChange = (alignmentType) => {
-    setAlignment(alignmentType); 
+    setFormData({...formData, alignment: alignmentType});
   };
 
   return (
@@ -24,15 +48,18 @@ function WritePage() {
             <option value="2">회사2</option>
             <option value="3">회사3</option>
           </select>
-          <select>
-            <option>폰트 선택</option>
-            <option>Arial</option>
-            <option>Verdana</option>
+          <select onChange={handleFontChange} value={formData.font}>
+            <option value="">폰트 선택</option>
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Times New Roman">Times New Roman</option>
           </select>
-          <select>
-            <option>폰트 크기</option>
-            <option>12px</option>
-            <option>14px</option>
+          <select onChange={handleFontSizeChange} value={formData.fontSize}>
+            <option value="">크기 선택</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
           </select>
           <div>
           <button onClick={() => handleAlignmentChange("left")}>
@@ -49,18 +76,29 @@ function WritePage() {
 
         <input
           type="text"
+          name="title"
           placeholder="제목을 입력하세요."
           style={styles.titleInput}
+          onChange={handleChange}
+          value={formData.title}
         />
         <textarea
+          name="content"
           placeholder="내용을 입력하세요."
-          style={{ ...styles.textArea, textAlign: alignment }}
+          style={{
+            ...styles.textArea,
+            textAlign: formData.alignment,
+            fontFamily: formData.font,
+            fontSize: formData.fontSize,
+          }}     
+          onChange={handleChange}
+          value={formData.content}
         ></textarea>
-
         <div style={styles.fileUpload}>
           <p>파일 첨부</p>
           <input 
             type="file" 
+            onChange={handleFileChange}
           />
         </div>
       </div>
@@ -95,14 +133,6 @@ const styles = {
   },
   fileUpload: {
     marginBottom: "10px",
-  },
-  submitButton: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
   },
 };
 

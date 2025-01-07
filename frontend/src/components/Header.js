@@ -32,7 +32,6 @@ function Header( {page, selectedCompany} ) {
                 </div>
             </header>  
         </div>
-
     );
 }
 

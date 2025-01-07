@@ -7,6 +7,7 @@ import MainBoard from "./components/MainBoard";
 import Profile from "./components/Profile";
 import WritePage from "./components/WritePage";
 import Company from "./components/Company";
+import Article from "./components/Article";
 import Signin from './components/Signin';
 import Signup from './components/Signup';
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<Header page="home" />} />
         <Route path="/profile" element={<Header page="my" />} />
         <Route path="/company/:id" element={<Header page="company" />} />
+        <Route path="/articles/:id" element={<Header page="article" />} />
         {/* 기타 경로 추가 */}
       </Routes>
       
@@ -32,9 +34,10 @@ function App() {
         <Route path = "/writepage" element={<WritePage />} />
         {/* 회사 id를 동적으로 처리 */}
         <Route path = "/company/:id" element={<Company />} />
+        {/* 게시글 id를 동적으로 처리 */}
+        <Route path = "/articles/:id" element={<Article />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        {/* 기타 페이지 추가 */}
       </Routes>  
     </Router>
   );

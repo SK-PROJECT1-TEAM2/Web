@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Signin({onLogin}) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ email: "", password: "" });
   
@@ -17,6 +17,7 @@ function Login() {
       e.preventDefault();
       
       if (formData.email === "test@example.com" && formData.password === "1234") {
+        onLogin();
         navigate("/"); 
       } else {
         alert("이메일 또는 비밀번호가 잘못되었습니다.");
@@ -166,4 +167,4 @@ function Login() {
   };
   
   
-export default Login;
+export default Signin;

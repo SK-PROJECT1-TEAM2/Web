@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Header from "./Header"; 
 
-function WritePage() { 
+function WritePage({isLoggedIn, handleLogout}) { 
   const [company, setCompany] = useState("");
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState ({
@@ -39,7 +39,7 @@ function WritePage() {
 
   return (
     <div>
-      <Header page="writepage" selectedCompany={company} />
+      <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} page="writepage" selectedCompany={company} />
       <div style={styles.container}>
         <div style={styles.toolbar}>
           <select onChange={handleCompanyChange} value={company}>

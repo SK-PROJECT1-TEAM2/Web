@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import MainBoard from "./components/MainBoard";
 import Profile from "./components/Profile";
@@ -33,11 +33,12 @@ function App() {
       </Routes>
 
       <Routes>
+        {/* 로그인 상태에 따라 접근 가능한 페이지 설정 */}
         <Route path="/" element={<MainBoard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/writepage" element={<WritePage isLoggedIn={isLoggedIn} onLogout={handleLogout} />} />
-        <Route path="/company/:id" element={<Company />} />
-        <Route path="/articles/:id" element={<Article />} />
+        <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/signin" />} />
+        <Route path="/writepage" element={isLoggedIn ? <WritePage isLoggedIn={isLoggedIn} onLogout={handleLogout} /> : <Navigate to="/signin" />} />
+        <Route path="/company/:id" element={isLoggedIn ? <Company /> : <Navigate to="/signin" />} />
+        <Route path="/articles/:id" element={isLoggedIn ? <Article /> : <Navigate to="/signin" />} />
         <Route path="/signin" element={<Signin onLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

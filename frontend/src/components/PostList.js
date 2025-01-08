@@ -1,9 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function PostList({ company }) {
+  const navigate = useNavigate();
+
+  const handleCompanyClick = () => {
+    navigate(`/company/${company.id}`);
+  };
+
   return (
     <div style={styles.container}>
-      <h3 style={{ borderBottom: "1px solid black", paddingBottom: "5px" }}>
+      <h3 style={{ borderBottom: "1px solid black", paddingBottom: "5px" }} onClick={handleCompanyClick} >
         {company.name}</h3>
       <ul>
         {company.posts.map((post, index) => (

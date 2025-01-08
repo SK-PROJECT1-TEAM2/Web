@@ -58,7 +58,11 @@ function Company() {
         {company.posts
           .sort((a, b) => new Date(b.time) - new Date(a.time))
           .map((post, index) => (
-            <div key={index} style={styles.post}>
+            <div 
+              key={index} 
+              style={styles.post}
+              onClick={() => navigate(`/articles/${index}`)}  
+            >
               <h3 style={styles.postTitle}>{post.title}</h3>
               <p style={styles.postContent}>{post.content}</p>
               <div style={styles.postDetails}>

@@ -2,10 +2,16 @@
 // 상단 구성
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
+  const navigate = useNavigate();
   const companyPage = `/company/${selectedCompany}`;
+
+  const handleLogout = () => {
+    onLogout();  
+    navigate("/"); 
+  };
 
   return (
     <div style={styles.divstyle}>
@@ -23,7 +29,7 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
                 <button style={styles.button1}>글등록</button>
               </Link>
               {isLoggedIn ? (
-                <button onClick={onLogout} style={styles.button2}>
+                <button onClick={handleLogout} style={styles.button2}>
                   로그아웃
                 </button>
               ) : (
@@ -39,7 +45,7 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
                 <button style={styles.button1}>글쓰기</button>
               </Link>
               {isLoggedIn ? (
-                <button onClick={onLogout} style={styles.button2}>
+                <button onClick={handleLogout} style={styles.button2}>
                   로그아웃
                 </button>
               ) : (

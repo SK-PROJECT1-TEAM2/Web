@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Header from "./Header"; 
 
-function WritePage({isLoggedIn, handleLogout}) { 
+function WritePage({isLoggedIn, onLogout}) { 
   const [company, setCompany] = useState("");
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState ({
@@ -36,10 +36,10 @@ function WritePage({isLoggedIn, handleLogout}) {
   const handleAlignmentChange = (alignmentType) => {
     setFormData({...formData, alignment: alignmentType});
   };
-
+  
   return (
     <div>
-      <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} page="writepage" selectedCompany={company} />
+      <Header page="writepage" selectedCompany={company} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div style={styles.container}>
         <div style={styles.toolbar}>
           <select onChange={handleCompanyChange} value={company}>

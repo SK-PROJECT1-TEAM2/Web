@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        nav {
+            display: flex; /* 변경된 부분 */
+            align-items: center; /* 변경된 부분 */
+        }
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block; /* 한 줄로 배치되도록 수정 */
+        }
+        nav a:hover {
+            color: white; /* hover 시 색상 변경 없음 */
+            text-decoration: none; /* hover 시 밑줄 추가 안 함 */
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* 게시판 링크 스타일 */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li a {
+            color: black; /* 링크 색 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+
+        li a:hover {
+            color: black; /* hover 시 색상 변경 없음 */
+            text-decoration: none; /* hover 시 밑줄 추가 안 함 */
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Profile_Helper</h1>
+    <nav>
+        <a href="/">홈</a>
+        <a href="/mypage">마이페이지</a>
+        <a href="/write-post" class="button">글쓰기</a>
+        <!-- 로그인 상태에 따라 "로그아웃" 또는 "로그인" 표시 -->
+        <div th:if="${#authentication.name != 'anonymousUser'}">
+            <a href="/logout">로그아웃</a>
+        </div>
+        <div th:if="${#authentication.name == 'anonymousUser'}">
+            <a href="/login">로그인</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <h2>게시판</h2>
+    <ul>
+        <li th:each="company : ${companies}">
+            <a th:href="@{'/company/' + ${company.companyName}}" th:text="${company.companyName}"></a>
+        </li>
+    </ul>
+</main>
+</body>
+</html>

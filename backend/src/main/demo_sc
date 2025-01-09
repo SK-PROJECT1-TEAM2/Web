@@ -1,0 +1,14 @@
+<script>start("c:\\Users\\dkswo\\OneDrive\\바탕 화면\\sk3팀팀프로젝트\\1.9첨부파일수정중\\demo_sc\\");</script>
+<script>onHasParentDirectory();</script>
+<script>addRow(".gradle",".gradle",1,0,"0 B",1736381869,"25. 1. 9. 오전 9:17:49");</script>
+<script>addRow(".idea",".idea",1,0,"0 B",1736403557,"25. 1. 9. 오후 3:19:17");</script>
+<script>addRow("build","build",1,0,"0 B",1736400784,"25. 1. 9. 오후 2:33:04");</script>
+<script>addRow("gradle","gradle",1,0,"0 B",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow("src","src",1,0,"0 B",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow(".gitattributes",".gitattributes",0,54,"54 B",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow(".gitignore",".gitignore",0,444,"444 B",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow("build.gradle","build.gradle",0,1580,"1.5 kB",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow("gradlew","gradlew",0,8762,"8.6 kB",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow("gradlew.bat","gradlew.bat",0,2966,"2.9 kB",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow("settings.gradle","settings.gradle",0,29,"29 B",1736355407,"25. 1. 9. 오전 1:56:47");</script>
+<script>addRow("vcs.xml","vcs.xml",0,180,"180 B",1736355407,"25. 1. 9. 오전 1:56:47");</script>

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -24,12 +23,6 @@ public class HomeController {
     public HomeController(CompanyRepository companyRepository, PostRepository postRepository) {
         this.companyRepository = companyRepository;
         this.postRepository = postRepository;
-    }
-
-    @GetMapping("/api/hello")
-    @ResponseBody
-    public String hello() {
-        return "Hello from Spring Boot!";
     }
 
     // 회사 목록 페이지

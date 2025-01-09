@@ -28,12 +28,4 @@ public class UserService {
                         .user_name(userDto.getUser_name())
                         .build());
     }
-
-    // 로그인 인증 처리
-    public boolean authenticate(String email, String password) {
-        // Optional로 반환된 값을 처리
-        return userRepository.findByEmail(email)
-                .map(user -> bCryptPasswordEncoder.matches(password, user.getPassword())) // 비밀번호 확인
-                .orElse(false); // 사용자 없음 처리
-    }
 }

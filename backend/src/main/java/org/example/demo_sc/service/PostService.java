@@ -117,8 +117,16 @@ public class PostService {
     }
 
     // 게시글 삭제
-    public void deletePost(Integer postNo) {
-        postRepository.deleteById(postNo);
+    public void deletePost(Integer id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+        postRepository.delete(post);
+    }
+
+
+    public Post getPostByNo(Integer postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found with ID: " + postId));
     }
 
 }

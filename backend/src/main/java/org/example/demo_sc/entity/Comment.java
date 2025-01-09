@@ -1,10 +1,7 @@
 package org.example.demo_sc.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class Comment {
     @Id
@@ -29,12 +27,12 @@ public class Comment {
     @Column(nullable = false)
     private String comment;
 
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private LocalDateTime updated_at;
 
     @PrePersist
     public void onCreate() {
-        created_at = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
     @PreUpdate

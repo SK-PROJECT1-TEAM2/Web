@@ -9,20 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-/**
-@Service
-public class FileService {
 
-    private final String UPLOAD_DIR = "/uploads";
-
-    public String saveFile(MultipartFile file) throws IOException {
-        String filePath = UPLOAD_DIR + "/" + file.getOriginalFilename();
-        File dest = new File(filePath);
-        file.transferTo(dest);
-        return filePath;
-    }
-}
- */
 @Service
 public class FileService {
 

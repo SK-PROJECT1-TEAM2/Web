@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        nav a:hover {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .post-container {
+            margin-bottom: 30px;
+        }
+        .comment-section {
+            margin-top: 30px;
+        }
+        .comment {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .comment:last-child {
+            border-bottom: none;
+        }
+        .comment p {
+            margin: 5px 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        form textarea {
+            width: 100%;
+            height: 100px;
+        }
+        form button {
+            align-self: flex-start;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Profile_Helper</h1>
+    <nav>
+        <a href="/">홈</a>
+        <a href="/mypage">마이페이지</a>
+        <a href="/write-post" class="button">글쓰기</a>
+        <div th:if="${#authentication.name != 'anonymousUser'}">
+            <a href="/logout">로그아웃</a>
+        </div>
+        <div th:if="${#authentication.name == 'anonymousUser'}">
+            <a href="/login">로그인</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <!-- 작성자인 경우에만 삭제 및 수정 버튼 표시 -->
+    <div th:if="${user}">
+        <button
+                id="edit-button"
+                class="edit-btn"
+                th:onclick="'editPost(' + ${post.postNo} + ');'">
+            수정
+        </button>
+        <button
+                id="delete-button"
+                class="delete-btn"
+                th:onclick="'deletePost(' + ${post.postNo} + ');'">
+            삭제
+        </button>
+    </div>
+
+    <div class="post-container">
+        <h2 th:text="${post.title}">글 제목</h2>
+        <p th:text="${post.content}">글 내용</p>
+    </div>
+
+    <div class="comment-section">
+        <h3>댓글</h3>
+        <!-- 댓글 출력 -->
+        <div th:if="${comments != null}" th:each="comment : ${comments}">
+            <div class="comment">
+                <p><strong th:text="${comment.username}">작성자</strong></p>
+                <p th:text="${comment.comment}">댓글 내용</p>
+                <p><em th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성 시간</em></p>
+            </div>
+        </div>
+
+        <div th:if="${comments == null}">
+            <p>댓글이 없습니다.</p>
+        </div>
+        <!-- 댓글 작성 -->
+        <form th:action="@{/api/articles/post/{postId}/comment(postId=${post.postNo})}" method="post">
+            <textarea name="content" placeholder="댓글을 남겨주세요." required></textarea>
+            <button type="submit">댓글 등록</button>
+        </form>
+    </div>
+
+</main>
+
+<script>
+    function deletePost(postId) {
+        if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+            fetch(`/api/articles/${postId}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("게시글이 삭제되었습니다.");
+                        window.location.href = "/";
+                    } else {
+                        alert("게시글 삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    }
+
+    function editPost(postId) {
+        window.location.href = `/api/articles/post/edit/${postId}`;
+    }
+</script>
+</body>
+</html>

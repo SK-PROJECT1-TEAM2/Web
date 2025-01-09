@@ -90,6 +90,9 @@ public class User implements UserDetails {
         // 사용자의 암호화된 암호 대체 처리
         return password;
     }
+    public String getDisplayName() {
+        return username; // 이름 반환
+    }
 
     @Override
     public boolean isAccountNonExpired() {

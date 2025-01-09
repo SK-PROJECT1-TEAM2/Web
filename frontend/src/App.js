@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import MainBoard from "./components/MainBoard";
@@ -12,6 +12,7 @@ import Signup from './components/Signup';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState(""); // 상태 선언 추가
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -20,6 +21,13 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/hello") // Spring Boot API 주소
+        .then((response) => response.text())
+        .then((data) => setMessage(data))
+        .catch((error) => console.error("Error:", error));
+}, []);
 
   return (
     <Router>

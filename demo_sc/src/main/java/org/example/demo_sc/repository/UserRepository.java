@@ -3,6 +3,8 @@ package org.example.demo_sc.repository;
 import org.example.demo_sc.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
+
 import java.util.Optional;
 
 /**

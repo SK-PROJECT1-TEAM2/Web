@@ -1,10 +1,7 @@
 package org.example.demo_sc.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,12 +9,14 @@ import java.util.List;
 @Table(name = "posts")
 @Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
+@Builder
 @Entity
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer post_no;
+    private Integer postNo;
 
     @ManyToOne
     @JoinColumn(name = "user_no", nullable = false)
@@ -33,19 +32,20 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(updatable = false)
-    private LocalDateTime created_at;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt; // Java 스타일로 변경
 
-    private LocalDateTime updated_at;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt; // Java 스타일로 변경
 
     @PrePersist
     public void onCreate() {
-        created_at = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void onUpdate() {
-        updated_at = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

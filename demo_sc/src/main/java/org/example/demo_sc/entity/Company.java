@@ -17,10 +17,11 @@ import java.util.List;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer company_no;
+    @Column(name = "company_no")
+    private Integer companyNo;
 
-    @Column(nullable = false, length = 100)
-    private String company_name;
+    @Column(name = "company_name", nullable = false, length = 100)
+    private String companyName;
 
     @Column(updatable = false)
     private LocalDateTime created_at;
@@ -32,4 +33,13 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Post> posts; // 회사에 속한 게시물들
+
+    // 명시적으로 getter 메서드 추가
+    public Integer getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 }

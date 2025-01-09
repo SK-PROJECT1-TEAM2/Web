@@ -22,16 +22,24 @@ public class Attachment {
     @Column(nullable = false, length = 255)
     private String file_name;
 
+    @Column(nullable = false, length = 255)
+    private String save_name;
+
+    @Column(nullable = false, length = 255)
+    private String file_type;
+
     @Column(nullable = false, length = 500)
     private String file_url;
 
-    @Column(nullable = false, length = 50)
-    private String file_type;
 
-    private LocalDateTime uploaded_at;
-
-    @PrePersist
-    public void onCreate() {
-        uploaded_at = LocalDateTime.now();
+    @Builder
+    public Attachment(Integer attachment_no, Post post, String file_name, String save_name, String file_type, String file_url) {
+        this.attachment_no = attachment_no;
+        this.post = post;
+        this.file_name = file_name;
+        this.save_name = save_name;
+        this.file_type = file_type;
+        this.file_url = file_url;
     }
+
 }

@@ -31,8 +31,8 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Column( nullable = false, length = 50) // 스네이크 표기법으로 컬럼 이름 지정
-    private String user_name; // 사용자 이름
+    @Column( name = "user_name", nullable = false, length = 50) // 스네이크 표기법으로 컬럼 이름 지정
+    private String username; // 사용자 이름
 
     @Column( updatable = false)
     private LocalDateTime created_at; // 생성 시간
@@ -49,13 +49,18 @@ public class User implements UserDetails {
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Mentor> mentors; // 사용자가 멘토로 등록된 경우
 
+    // 명시적으로 getter 메서드 추가
+    public Integer getUserNo() {
+        return user_no;
+    }
+
 
     // 생성자 + 빌더
     @Builder
     public User(String email, String password, String user_name) {
         this.email = email;
         this.password = password;
-        this.user_name = user_name;
+        this.username = user_name;
     }
 
 

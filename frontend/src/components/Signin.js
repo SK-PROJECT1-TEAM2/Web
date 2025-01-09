@@ -24,33 +24,33 @@ function Signin({onLogin}) {
       // }
 
     fetch("http://localhost:8080/login_process", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.text(); // 성공 메시지 반환
-        } else if (response.status === 401) {
-          throw new Error("이메일 또는 비밀번호가 잘못되었습니다.");
-        } else {
-          throw new Error("서버 오류가 발생했습니다.");
-        }
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       })
-      .then((message) => {
-        alert(message); // 로그인 성공 메시지
-        onLogin(); // 로그인 상태 업데이트
-        navigate("/"); // 홈 화면으로 이동
-      })
-      .catch((error) => {
-        alert(error.message); // 오류 메시지 표시
-      });
-    };
+        .then((response) => {
+          if (response.ok) {
+            return response.text(); // 성공 메시지 반환
+          } else if (response.status === 401) {
+            throw new Error("이메일 또는 비밀번호가 잘못되었습니다.");
+          } else {
+            throw new Error("서버 오류가 발생했습니다.");
+          }
+        })
+        .then((message) => {
+          alert(message); // 로그인 성공 메시지
+          onLogin(); // 로그인 상태 업데이트
+          navigate("/"); // 홈 화면으로 이동
+        })
+        .catch((error) => {
+          alert(error.message); // 오류 메시지 표시
+        });
+      };
   
     return (
         <div style={styles.outerContainer}>

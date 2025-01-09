@@ -26,10 +26,31 @@ function Signup() {
         return;
       }
 
-      // 백엔드로 데이터 전송하는 것 추가 필요
-      alert(`회원가입 성공: ${formData.username}, ${formData.email}`);
-      navigate("/signin");
-    };
+      // 회원가입 데이터 백엔드로 전송
+      fetch("http://localhost:8080/signup_process", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // JSON 데이터 전송
+        },
+        body: JSON.stringify({
+          user_name: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            alert("회원가입 성공!");
+            navigate("/signin");
+          } else {
+            alert("회원가입 실패! 다시 시도해주세요.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("서버 오류가 발생했습니다.");
+        });
+      };
   
     return (
         <div style={styles.outerContainer}>

@@ -23,12 +23,6 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  useEffect(() => {
-    fetch("http://localhost:8080/api/hello") // Spring Boot API 주소
-        .then((response) => response.text())
-        .then((data) => setMessage(data))
-        .catch((error) => console.error("Error:", error));
-}, []);
 
   return (
     <Router>

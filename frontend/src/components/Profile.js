@@ -1,31 +1,31 @@
-// import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import profileImage from "./profileImage.png";
-// import axios from "axios";
 
-function Profile (){
-    // const [userInfo, setUserInfo] = useState(null);
+function Profile() {
+  const [userInfo, setUserInfo] = useState(null);
 
-    // useEffect(() => {
-    //     const fetchUserInfo = async () => {
-    //         try {
-    //             const token = localStorage.getItem("token");
-    //             const response = await axios.get("api//", {
-    //                 headers:{
-    //                     Authorization: `Bearer ${token}`,
-    //                 },
-    //             });
-    //             setUserInfo(response.data);
-    //         } catch (error) {
-    //             console.log("Failed to fetch user info", error);
-    //         }
-    //     };
-    //     fetchUserInfo();
-    // }, []);
+  useEffect(() => {
+    fetch("http://localhost:8080/mypage", {
+      method: "GET",
+      credentials: "include", // 세션 쿠키 포함
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("사용자 정보를 불러오는 데 실패했습니다.");
+        }
+      })
+      .then((data) => setUserInfo(data))
+      .catch((error) => {
+        console.error(error.message);
+        window.location.href = "/login"; // 로그인되지 않은 경우 로그인 페이지로 리디렉션
+      });
+  }, []);
 
-    const userInfo = {
-        username: "username1",
-        email: "example@mail.com",
-      };
+  if (!userInfo) {
+    return <p>로딩 중...</p>;
+  }
 
       return (
         <div style={styles.container}>  

@@ -9,112 +9,95 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
   const companyPage = `/company/${selectedCompany}`;
 
   const handleLogout = () => {
-    onLogout();
-    navigate("/");
+    onLogout();  
+    navigate("/"); 
   };
 
   return (
-    <header style={styles.header}>
-      <h1 style={styles.title}>ProfileHelper</h1>
-      <nav style={styles.nav}>
-        <Link to="/" style={styles.link}>홈</Link>
-        <Link to="/profile" style={styles.link}>마이페이지</Link>
-      </nav>
-      <div style={styles.buttonContainer}>
-        {page === "writepage" ? (
-          <>
-            <Link to={companyPage}>
-              <button style={styles.button1}>글등록</button>
-            </Link>
-            {isLoggedIn ? (
-              <button onClick={handleLogout} style={styles.button2}>
-                로그아웃
-              </button>
-            ) : (
-              <Link to="/signin">
-                <button style={styles.button2}>로그인</button>
+    <div style={styles.divstyle}>
+      <header style={styles.header}>
+        <h1 style={styles.title}>ProfileHelper</h1>
+        <nav style={styles.nav}>
+          <Link to="/">홈</Link>
+          <Link to="/profile">마이페이지</Link>
+        </nav>
+        <div>
+          {page === "writepage" ? (
+            // WritePage일 경우
+            <>
+              <Link to={companyPage}>
+                <button style={styles.button1}>글등록</button>
               </Link>
-            )}
-          </>
-        ) : (
-          <>
-            <Link to="/writepage">
-              <button style={styles.button1}>글쓰기</button>
-            </Link>
-            {isLoggedIn ? (
-              <button onClick={handleLogout} style={styles.button2}>
-                로그아웃
-              </button>
-            ) : (
-              <Link to="/signin">
-                <button style={styles.button2}>로그인</button>
+              {isLoggedIn ? (
+                <button onClick={handleLogout} style={styles.button2}>
+                  로그아웃
+                </button>
+              ) : (
+                <Link to="/signin">
+                  <button style={styles.button2}>로그인</button>
+                </Link>
+              )}
+            </>
+          ) : (
+            // WritePage가 아닐 경우
+            <>
+              <Link to="/writepage">
+                <button style={styles.button1}>글쓰기</button>
               </Link>
-            )}
-          </>
-        )}
-      </div>
-    </header>
+              {isLoggedIn ? (
+                <button onClick={handleLogout} style={styles.button2}>
+                  로그아웃
+                </button>
+              ) : (
+                <Link to="/signin">
+                  <button style={styles.button2}>로그인</button>
+                </Link>
+              )}
+            </>
+          )}
+        </div>
+      </header>
+    </div>
   );
 }
 
 const styles = {
+  divstyle: {
+    maxWidth: "1900px",
+    width: "180%",
+  },
   header: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: "5px 20px",
+    padding: "10px",
     borderBottom: "1px solid #ddd",
-    position: "fixed",
-    top: "0",
-    left: "0",
-    right: "0",
-    height: "60px",
-    backgroundColor: "#fff",
-    zIndex: "1000",
-    boxSizing: "border-box",  
-    overflow: "hidden",  
-    flexWrap: "wrap",
   },
   title: {
-    fontSize: "24px",
-    margin: "0",
-    flexShrink: 0,  
-    whiteSpace: "nowrap", 
+    margin: "0 400px",
+    flex: 0,
   },
   nav: {
     display: "flex",
     gap: "10px",
     justifyContent: "flex-start",
     flex: 1,
-    marginLeft: "20px",
-  },
-  link: {
-    textDecoration: "none",
-    color: "black",
-  },
-  buttonContainer: {
-    display: "flex",
-    gap: "10px",
-    justifyContent: "flex-end",
-    flexShrink: 0,
+    marginLeft: "-300px",
   },
   button1: {
+    marginRight: "10px",
     padding: "5px 10px",
-    fontSize: "14px",
-    fontWeight: "bold",
-    backgroundColor: "#297BFF",
+    backgroundColor: "#007bff",
     color: "white",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
   },
   button2: {
+    marginRight: "400px",
     padding: "5px 10px",
-    fontSize: "14px",
-    fontWeight: "bold",
     backgroundColor: "white",
     color: "black",
-    border: "1.25px solid rgba(0, 0, 0, 0.2)",
+    border: "1px solid black",
     borderRadius: "5px",
     cursor: "pointer",
   },

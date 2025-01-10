@@ -39,7 +39,7 @@ function Board() {
 
     return (
       <div style={styles.boardContainer}>
-        <h2 style={styles.title}>게시판</h2>
+        <h2>게시판</h2>
         {companies.map((company, index) => (
           <PostList key={index} company={company} />
         ))}
@@ -48,29 +48,12 @@ function Board() {
   }
 
 const styles = {
-  boardContainer: {
-    padding: "30px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: "40px auto",
-    maxWidth: "900px",
-    width: "100%",
-    border: "1.25px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "8px", 
-    boxSizing: "border-box",
-    marginTop: "90px",
+  boardContainer:{
+      padding: "30px 50px",
+      margin: "40px 350px",
+      maxWidth: "1100px",
+      width: "95%", 
   },
-  title: {
-    textAlign: "left",
-    width: "100%",
-    fontSize: "34px",
-    fontWeight: "700",
-    marginTop: "-10px",
-  },
-  
 };
-  
 
 export default Board;

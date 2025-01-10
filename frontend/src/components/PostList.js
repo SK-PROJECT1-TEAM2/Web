@@ -10,39 +10,80 @@ function PostList({ company }) {
 
   return (
     <div style={styles.container}>
-      <h3 style={{ borderBottom: "1px solid black", paddingBottom: "5px" }} onClick={handleCompanyClick} >
-        {company.name}</h3>
-      <ul>
+      <h3
+        style={styles.companyName}
+        onClick={handleCompanyClick}
+      >
+        {company.name}
+      </h3>
+      <div style={styles.postsContainer}>
         {company.posts.map((post, index) => (
-        <li key={index} style={styles.post}>
-        <div style={styles.postTitle}><span>{post.title}</span></div>
-        <div style={styles.postDetails}>
-          <span style={styles.postTime}>{post.time}</span> 
-          <span>{post.user}</span>
-        </div>
-      </li>
+          <div key={index} style={styles.post}>
+            <div style={styles.postTitle}>
+              <span>{post.title}</span>
+            </div>
+            <div style={styles.postDetails}>
+              <span>{post.user}</span>
+              <span style={styles.postTime}>{post.time}</span>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
 
 const styles = {
-  container: { marginBottom: "20px" },
-  post: {
+  container: {
+    padding: "30px",
     display: "flex",
-    padding: "7px 0",
+    flexDirection: "column",
+    margin: "40px auto",
+    maxWidth: "900px",
+    width: "100%",
+    border: "1.25px solid rgba(0, 0, 0, 0.2)",
+    borderRadius: "8px",
+    boxSizing: "border-box",
+    marginTop: "90px",
+  },
+  companyName: {
+    textAlign: "left",
+    width: "100%",
+    fontSize: "34px",
+    fontWeight: "700",
+    marginTop: "-5px",
+    marginBottom: "30px",
+    cursor: "pointer",
+    borderBottom: "1px solid black",
+    paddingBottom: "5px",
+  },
+  postsContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
+  },
+  post: {
+    padding: "20px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    backgroundColor: "#f9f9f9",
   },
   postTitle: {
-    flex: 1, 
-    marginLeft : "-40px",
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    marginTop: "-1px",
+    marginBottom: "10px",
+    borderBottom: "1px solid #ddd",
+    paddingBottom: "5px",
   },
   postDetails: {
+    fontSize: "0.9rem",
+    color: "#888",
     display: "flex",
-    gap: "10px",
+    justifyContent: "space-between",
   },
   postTime: {
-    marginRight: "30px",
+    fontStyle: "italic",
   },
 };
 

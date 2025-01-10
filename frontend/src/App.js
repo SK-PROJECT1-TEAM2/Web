@@ -11,8 +11,6 @@ import Signin from './components/Signin';
 import Signup from './components/Signup';
 
 
-//
-//fadfdasfadfkjad;an;oa
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState(""); // 상태 선언 추가

@@ -36,6 +36,12 @@ public class HomeController {
     @GetMapping("/")
     public String showBoard(Model model) {
         List<Company> companies = companyRepository.findAll();
+
+        // 'MENTOR REGISTER'를 제외한 회사 목록 필터링
+        companies = companies.stream()
+                .filter(company -> !"MENTOR REGISTER".equals(company.getCompanyName()))
+                .toList();
+
         Map<Integer, List<Post>> companyPostsMap = new HashMap<>();
 
         for (Company company : companies) {
@@ -60,6 +66,7 @@ public class HomeController {
         // 회사 정보 조회
         Company company = companyRepository.findByCompanyName(companyName)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid company name: " + companyName));
+
 
         // 페이지 및 정렬 설정
         Pageable pageable = PageRequest.of(page, 5, Sort.by("createdAt").descending()); // 한 페이지에 5개의 게시글 표시
@@ -94,7 +101,10 @@ public class HomeController {
     @GetMapping("/write-post")
     public String showWritePostPage(Model model) {
         // 데이터베이스에서 회사 목록 조회
-        List<Company> companies = companyRepository.findAll();
+        List<Company> companies = companyRepository.findAll().stream()
+                .filter(company -> !"MENTOR REGISTER".equals(company.getCompanyName()))
+                .toList();
+
         // Thymeleaf로 데이터 전달
         model.addAttribute("companies", companies);
         return "write"; // 템플릿 파일 이름

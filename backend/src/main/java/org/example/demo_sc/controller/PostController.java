@@ -86,6 +86,7 @@ public class PostController {
         Company company = companyRepository.findById(companyNo)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid company ID: " + companyNo));
 
+
         // 게시글 생성
         Post post = new Post();
         post.setTitle(title);

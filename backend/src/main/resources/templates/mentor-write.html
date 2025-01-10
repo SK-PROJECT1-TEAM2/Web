@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글쓰기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        nav a:hover {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        /* 요소를 세로로 정렬 */
+        form {
+            display: flex;
+            flex-direction: column; /* 요소를 수직으로 정렬 */
+            gap: 15px; /* 요소 간 간격 추가 */
+        }
+
+        form label {
+            margin-bottom: 5px; /* 레이블과 입력 요소 간 간격 */
+        }
+
+        form select, form textarea, form input[type="file"] {
+            width: 100%; /* 입력 요소가 form의 너비를 채우도록 설정 */
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>Profile_Helper</h1>
+    <nav>
+        <a href="/">홈</a>
+        <a href="/mypage">마이페이지</a>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h2>멘토 등록</h2>
+        <form action="/mypage/post" method="post" enctype="multipart/form-data">
+            <!-- 제목 입력 -->
+            <label for="title">경력 회사:</label>
+            <input type="text" name="title" id="title" placeholder="재직 경험이 있는 회사를 입력하세요." required />
+
+
+            <label for="file">재직 증명 파일을 업로드하세요.</label>
+            <input type="file" name="file" id="file" />
+
+            <input type="hidden" name="content" value="멘토등록" />
+            <input type="hidden" name="companyNo" value="6" /> <!-- 이 값을 실제 "MENTOR REGISTER" id 값으로 교체하세요 -->
+
+            <button type="submit">등록</button>
+        </form>
+
+    </div>
+</main>
+</body>
+</html>

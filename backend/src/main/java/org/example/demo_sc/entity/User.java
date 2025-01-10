@@ -2,6 +2,8 @@ package org.example.demo_sc.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,6 +49,7 @@ public class User implements UserDetails {
     private List<Comment> comments; // 사용자가 작성한 댓글들
 
     @OneToMany( mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<Mentor> mentors; // 사용자가 멘토로 등록된 경우
 
     // 명시적으로 getter 메서드 추가

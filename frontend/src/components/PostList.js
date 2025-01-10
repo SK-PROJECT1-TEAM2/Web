@@ -33,6 +33,7 @@ function PostList({ company }) {
   );
 }
 
+
 const styles = {
   container: {
     padding: "30px",
@@ -51,8 +52,8 @@ const styles = {
     width: "100%",
     fontSize: "34px",
     fontWeight: "700",
-    marginTop: "-5px",
-    marginBottom: "30px",
+    marginTop: "-1px",
+    marginBottom: "40px",
     cursor: "pointer",
     borderBottom: "1px solid black",
     paddingBottom: "5px",
@@ -69,7 +70,7 @@ const styles = {
     backgroundColor: "#f9f9f9",
   },
   postTitle: {
-    fontSize: "1.5rem",
+    fontSize: "20px",
     fontWeight: "bold",
     marginTop: "-1px",
     marginBottom: "10px",
@@ -82,9 +83,13 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
   },
+  postUser: {
+    fontWeight: "500",
+  },
   postTime: {
     fontStyle: "italic",
   },
 };
+
 
 export default PostList;

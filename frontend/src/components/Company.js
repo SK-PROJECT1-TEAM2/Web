@@ -54,7 +54,7 @@ function Company() {
   return (
     <div style={styles.container}>
       <h2 style={styles.companyName}>{company.name}</h2>
-      <div>
+      <div style={styles.postsContainer}>
         {company.posts
           .sort((a, b) => new Date(b.time) - new Date(a.time))
           .map((post, index) => (
@@ -66,8 +66,8 @@ function Company() {
               <h3 style={styles.postTitle}>{post.title}</h3>
               <p style={styles.postContent}>{post.content}</p>
               <div style={styles.postDetails}>
-                <span>{post.user}</span>
-                <span>{post.time}</span>
+                <span style={styles.postUser}>{post.user}</span>
+                <span style={styles.postTime}>{post.time}</span>
               </div>
             </div>
         ))}
@@ -78,31 +78,59 @@ function Company() {
 
 const styles = {
   container: {
-    padding: "30px 50px",
-      margin: "40px 350px",
-      maxWidth: "1100px",
-      width: "95%", 
+    padding: "30px",
+    display: "flex",
+    flexDirection: "column",
+    margin: "40px auto",
+    maxWidth: "900px",
+    width: "100%",
+    border: "1.25px solid rgba(0, 0, 0, 0.2)",
+    borderRadius: "8px",
+    boxSizing: "border-box",
+    marginTop: "90px",
   },
   companyName: {
-    fontSize: "36px",
-    marginBottom: "50px",
+    textAlign: "left",
+    width: "100%",
+    fontSize: "34px",
+    fontWeight: "700",
+    marginTop: "-5px",
+    marginBottom: "30px",
+  },
+  postsContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "40px",
   },
   post: {
-    marginBottom: "20px",
-    padding: "15px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-  },
+      padding: "0", 
+      border: "none", 
+      borderRadius: "0", 
+      backgroundColor: "transparent", 
+    },
   postTitle: {
     fontSize: "1.5rem",
     fontWeight: "bold",
+    marginTop: "-1px",
+    marginBottom: "10px",
+    borderBottom: "1px solid #ddd",
+    paddingBottom: "5px",
+  },
+  postContent: {
+    fontSize: "1rem",
+    marginBottom: "10px",
   },
   postDetails: {
-    marginTop: "10px",
     fontSize: "0.9rem",
     color: "#888",
     display: "flex",
     justifyContent: "space-between",
+  },
+  postUser: {
+    fontWeight: "500",
+  },
+  postTime: {
+    fontStyle: "italic",
   },
 };
 

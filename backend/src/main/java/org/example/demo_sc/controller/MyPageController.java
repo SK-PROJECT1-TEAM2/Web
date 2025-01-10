@@ -159,7 +159,8 @@ public class MyPageController {
 
         if (authentication != null) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            response.put("username", userDetails.getDisplayName());
+            User user = (User) userDetails;
+            response.put("username", user.getDisplayName());
             response.put("email", userDetails.getUsername()); // 예시로 이메일을 생성 (실제로는 DB에서 가져와야 함)
         } else {
             response.put("message", "로그인되지 않았습니다.");

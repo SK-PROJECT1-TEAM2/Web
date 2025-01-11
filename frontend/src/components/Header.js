@@ -18,10 +18,10 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
       <header style={styles.header}>
         <h1 style={styles.title}>ProfileHelper</h1>
         <nav style={styles.nav}>
-          <Link to="/">홈</Link>
-          <Link to="/profile">마이페이지</Link>
+          <Link to="/" style={styles.link}>홈</Link>
+          <Link to="/profile" style={styles.link}>마이페이지</Link>
         </nav>
-        <div>
+        <div style={styles.buttonContainer}>
           {page === "writepage" ? (
             // WritePage일 경우
             <>

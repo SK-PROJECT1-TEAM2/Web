@@ -102,7 +102,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f0f4f8",
     fontFamily: "'Noto Sans KR', sans-serif",
   },
   boxContainer: {
@@ -114,13 +114,13 @@ const styles = {
     aspectRatio: "500 / 950",
     padding: "20px",
     backgroundColor: "#ffffff",
-    border: "1.25px solid rgba(0, 0, 0, 0.2)",
     textAlign: "center",
     fontFamily: "'Noto Sans KR', sans-serif",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    boxShadow: "0 16px 40px rgba(0, 0, 0, 0.1)", 
   },
   title: {
     display: "flex",

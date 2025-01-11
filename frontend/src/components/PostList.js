@@ -10,86 +10,40 @@ function PostList({ company }) {
 
   return (
     <div style={styles.container}>
-      <h3
-        style={styles.companyName}
-        onClick={handleCompanyClick}
-      >
-        {company.name}
-      </h3>
-      <div style={styles.postsContainer}>
+      <h3 style={{ borderBottom: "1px solid black", paddingBottom: "5px" }} onClick={handleCompanyClick} >
+        {company.name}</h3>
+      <ul>
         {company.posts.map((post, index) => (
-          <div key={index} style={styles.post}>
-            <div style={styles.postTitle}>
-              <span>{post.title}</span>
-            </div>
-            <div style={styles.postDetails}>
-              <span>{post.user}</span>
-              <span style={styles.postTime}>{post.time}</span>
-            </div>
-          </div>
+        <li key={index} style={styles.post}>
+        <div style={styles.postTitle}><span>{post.title}</span></div>
+        <div style={styles.postDetails}>
+          <span style={styles.postTime}>{post.time}</span> 
+          <span>{post.user}</span>
+        </div>
+      </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
 
-
 const styles = {
-  container: {
-    padding: "30px",
-    display: "flex",
-    flexDirection: "column",
-    margin: "40px auto",
-    maxWidth: "900px",
-    width: "100%",
-    border: "1.25px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "8px",
-    boxSizing: "border-box",
-    marginTop: "90px",
-  },
-  companyName: {
-    textAlign: "left",
-    width: "100%",
-    fontSize: "34px",
-    fontWeight: "700",
-    marginTop: "-1px",
-    marginBottom: "40px",
-    cursor: "pointer",
-    borderBottom: "1px solid black",
-    paddingBottom: "5px",
-  },
-  postsContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-  },
+  container: { marginBottom: "20px" },
   post: {
-    padding: "20px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
+    display: "flex",
+    padding: "7px 0",
   },
   postTitle: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    marginTop: "-1px",
-    marginBottom: "10px",
-    borderBottom: "1px solid #ddd",
-    paddingBottom: "5px",
+    flex: 1, 
+    marginLeft : "-40px",
   },
   postDetails: {
-    fontSize: "0.9rem",
-    color: "#888",
     display: "flex",
-    justifyContent: "space-between",
-  },
-  postUser: {
-    fontWeight: "500",
+    gap: "10px",
   },
   postTime: {
-    fontStyle: "italic",
+    marginRight: "30px",
   },
 };
-
 
 export default PostList;

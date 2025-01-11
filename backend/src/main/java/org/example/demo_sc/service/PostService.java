@@ -1,9 +1,11 @@
 package org.example.demo_sc.service;
 
 import org.example.demo_sc.dto.PostDto;
+import org.example.demo_sc.entity.Attachment;
 import org.example.demo_sc.entity.Company;
 import org.example.demo_sc.entity.Post;
 import org.example.demo_sc.entity.User;
+import org.example.demo_sc.repository.AttachmentRepository;
 import org.example.demo_sc.repository.CompanyRepository;
 import org.example.demo_sc.repository.PostRepository;
 import org.example.demo_sc.repository.UserRepository;
@@ -20,11 +22,15 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final AttachmentRepository attachmentRepository;
+    private final FileService fileService;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, CompanyRepository companyRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CompanyRepository companyRepository, AttachmentRepository attachmentRepository, FileService fileService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
+        this.attachmentRepository = attachmentRepository;
+        this.fileService = fileService;
     }
 
     // 게시글 생성 (파일 업로드 포함)
@@ -43,14 +49,26 @@ public class PostService {
                 .company(company)
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
-                .filePath(file != null && !file.isEmpty() ? "/uploads/" + file.getOriginalFilename() : null)
                 .build();
 
+        Post savedPost = postRepository.save(post);
+
         if (file != null && !file.isEmpty()) {
-            saveFile(file, post.getFilePath());
+            String filePath = fileService.saveFile(file); // 파일 저장
+            Attachment attachment = Attachment.builder()
+                    .post(savedPost)
+                    .file_name(file.getOriginalFilename())
+                    .save_name(generateUniqueFileName(file.getOriginalFilename()))
+                    .file_type(file.getContentType())
+                    .file_url(filePath)
+                    .build();
+            attachmentRepository.save(attachment);
         }
 
-        postRepository.save(post);
+    }
+
+    private String generateUniqueFileName(String originalFileName) {
+        return System.currentTimeMillis() + "_" + originalFileName;
     }
 
     private void saveFile(MultipartFile file, String filePath) throws IOException {
@@ -65,7 +83,6 @@ public class PostService {
                         .company_no(post.getCompany() != null ? post.getCompany().getCompanyNo() : null)
                         .title(post.getTitle())
                         .content(post.getContent())
-                        .filePath(post.getFilePath())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -80,7 +97,6 @@ public class PostService {
                 .company_no(post.getCompany() != null ? post.getCompany().getCompanyNo() : null)
                 .title(post.getTitle())
                 .content(post.getContent())
-                .filePath(post.getFilePath())
                 .build();
     }
 
@@ -101,7 +117,16 @@ public class PostService {
     }
 
     // 게시글 삭제
-    public void deletePost(Integer postNo) {
-        postRepository.deleteById(postNo);
+    public void deletePost(Integer id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+        postRepository.delete(post);
     }
+
+
+    public Post getPostByNo(Integer postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found with ID: " + postId));
+    }
+
 }

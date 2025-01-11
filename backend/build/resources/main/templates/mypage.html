@@ -15,14 +15,14 @@
             justify-content: space-between;
         }
         nav {
-            display: flex; /* 변경된 부분 */
-            align-items: center; /* 변경된 부분 */
+            display: flex;
+            align-items: center;
         }
         nav a {
             color: white;
             margin: 0 10px;
             text-decoration: none;
-            display: inline-block; /* 한 줄로 배치되도록 수정 */
+            display: inline-block;
         }
         .container {
             margin: 20px auto;
@@ -48,7 +48,6 @@
         <a href="/">홈</a>
         <a href="/mypage">마이페이지</a>
         <a href="/write-post" class="button">글쓰기</a>
-        <!-- 로그인 상태에 따라 "로그아웃" 또는 "로그인" 표시 -->
         <div th:if="${#authentication.name != 'anonymousUser'}">
             <a href="/logout">로그아웃</a>
         </div>
@@ -58,8 +57,38 @@
     </nav>
 </header>
 <main>
+    <h2>마이페이지</h2>
     <div class="container">
-        <h2>마이페이지</h2>
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>내용</th>
+            </tr>
+            <tr>
+                <td>사용자 이름</td>
+                <td th:text="${username}">Username</td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+                <td th:text="${email}">Email</td>
+            </tr>
+            <tr>
+                <td>멘토 등록 회사</td>
+                <td>
+                    <th:block th:if="${not #lists.isEmpty(mentors)}">
+                        <th:block th:each="mentor : ${mentors}">
+                            <span th:text="${mentor.company.companyName}">회사 이름</span><br/>
+                        </th:block>
+                    </th:block>
+                    <th:block th:if="${#lists.isEmpty(mentors)}">
+                        <span>등록된 멘토 정보가 없습니다.</span>
+                    </th:block>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <h2>멘토 등록</h2>
+        <a href="/mypage/write-post">멘토 등록 글쓰기</a>
     </div>
 </main>
 </body>

@@ -38,9 +38,6 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; // Java 스타일로 변경
 
-    @Column(length = 255)
-    private String filePath;
-
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();

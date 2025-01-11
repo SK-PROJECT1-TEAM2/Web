@@ -95,20 +95,19 @@ function Article() {
   }
 
   return (
-    <div style={styles.boardContainer}>
-      {/* 게시글 영역*/}
+    <div style={styles.container}>
+      {/* 게시글 내용 */}
       <div style={styles.main}>
-        <h2 style={styles.title}>{article.title}</h2>
-        <div style={styles.articleDetails}>
-          <span>{article.user}</span>
-          <span>{article.time}</span>
-        </div>
-        <div style={styles.separator}></div>
+        <h2 style={styles.articleTitle}>{article.title}</h2>
         <p style={styles.articleContent}>{article.content}</p>
         <div style={styles.footer}>
           {article.file && (
             <div style={styles.file}>첨부파일: {article.file}</div>
           )}
+          <div style={styles.details}>
+            <span>{article.user}</span>
+            <span>{article.time}</span>
+          </div>
         </div>
       </div>
 
@@ -129,65 +128,44 @@ function Article() {
 
         {/* 댓글 리스트 */}
         <div style={styles.commentList}>
-            {comments.map((comment) => (
-                <div key={comment.id} style={styles.comment}>
-                    <div style={styles.commentDetails}>
-                        <span style={styles.commentUser}>{comment.user}</span>
-                         <span style={styles.commentTime}>{comment.time}</span>
-                    </div>
-                    <p style={styles.commentContent}>{comment.content}</p>
-                </div>
-            ))}
+          {comments.map((comment) => (
+            <div key={comment.id} style={styles.comment}>
+              <p>{comment.content}</p>
+              <div style={styles.commentDetails}>
+                <span>{comment.user}</span>
+                <span>{comment.time}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
-
 }
 
 const styles = {
-  boardContainer: {
-    padding: "30px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: "40px auto",
-    maxWidth: "900px",
-    width: "100%",
-    border: "1.25px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "8px", 
-    boxSizing: "border-box",
-    marginTop: "90px",
+  container: {
+    padding: "30px 50px",
+    margin: "40px 360px",
+    maxWidth: "1080px",
+    width: "93%",
   },
-  title: {
-    textAlign: "left",
-    width: "100%",
-    fontSize: "34px",
-    fontWeight: "700",
-    marginTop: "-10px",
-    marginBottom: "5px",
+  main: {
+    position: "relative",
+    paddingBottom: "30px",
+    borderBottom : "3px solid #ddd"
   },
-  articleDetails: {
-    display: "flex",
-    justifyContent: "space-between",
-    width: "100%",
-    fontSize: "0.9rem",
-    color: "#888",
-    marginTop: "10px",
-    marginTop: "5px", 
-  },
-  separator: {
-    width: "100%",
-    borderBottom: "2px solid #ddd",
-    margin: "10px 0",
+  articleTitle: {
+    fontSize: "2rem",
+    fontWeight: "bold",
+    marginBottom: "10px",
   },
   articleContent: {
     fontSize: "1.1rem",
     marginBottom: "20px",
   },
   footer: {
-    display: "flex",
+    display: "flex", 
     justifyContent: "space-between",
     alignItems: "center",
     fontSize: "0.9rem",
@@ -196,28 +174,30 @@ const styles = {
   file: {
     marginRight: "10px",
   },
+  details: {
+    display: "flex",
+    gap: "30px",
+  },
   reply: {
     marginTop: "50px",
     padding: "20px",
     border: "1px solid #ddd",
     borderRadius: "8px",
     backgroundColor: "#f9f9f9",
-    width: "100%", 
   },
   commentInput: {
-    width: "100%", 
-    minHeight: "80px", 
+    width: "97%",
+    height: "50px",
     marginBottom: "20px",
     padding: "10px",
     fontSize: "1rem",
     border: "1px solid #ddd",
     borderRadius: "8px",
-    boxSizing: "border-box", 
   },
   commentButton: {
     padding: "10px 20px",
     marginBottom: "50px",
-    backgroundColor: "#297BFF",
+    backgroundColor: "#4CAF50",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
@@ -232,30 +212,14 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "8px",
     backgroundColor: "#fff",
-    flexDirection: "column",
   },
   commentDetails: {
-      marginBottom: "5px", 
-      display: "flex",
-      flexDirection: "column", 
+    marginTop: "10px",
+    fontSize: "0.8rem",
+    color: "#888",
+    display: "flex",
+    justifyContent: "space-between",
   },
-  commentUser: {
-      fontSize: "1rem",  
-      fontWeight: "bold", 
-      color: "#000", 
-  },
-  commentTime: {
-      fontSize: "0.8rem", 
-      color: "#888", 
-      marginTop: "2px", 
-  },
-  commentContent: {
-      fontSize: "1rem",  
-      color: "#333",     
-      lineHeight: "1.5", 
-      marginTop: "10px", 
-  },    
 };
-
 
 export default Article;

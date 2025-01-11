@@ -9,51 +9,55 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
   const companyPage = `/company/${selectedCompany}`;
 
   const handleLogout = () => {
-    onLogout();
-    navigate("/");
+    onLogout();  
+    navigate("/"); 
   };
 
   return (
-    <header style={styles.header}>
-      <h1 style={styles.title}>ProfileHelper</h1>
-      <nav style={styles.nav}>
-        <Link to="/" style={styles.link}>홈</Link>
-        <Link to="/profile" style={styles.link}>마이페이지</Link>
-      </nav>
-      <div style={styles.buttonContainer}>
-        {page === "writepage" ? (
-          <>
-            <Link to={companyPage}>
-              <button style={styles.button1}>글등록</button>
-            </Link>
-            {isLoggedIn ? (
-              <button onClick={handleLogout} style={styles.button2}>
-                로그아웃
-              </button>
-            ) : (
-              <Link to="/signin">
-                <button style={styles.button2}>로그인</button>
+    <div style={styles.divstyle}>
+      <header style={styles.header}>
+        <h1 style={styles.title}>ProfileHelper</h1>
+        <nav style={styles.nav}>
+          <Link to="/">홈</Link>
+          <Link to="/profile">마이페이지</Link>
+        </nav>
+        <div>
+          {page === "writepage" ? (
+            // WritePage일 경우
+            <>
+              <Link to={companyPage}>
+                <button style={styles.button1}>글등록</button>
               </Link>
-            )}
-          </>
-        ) : (
-          <>
-            <Link to="/writepage">
-              <button style={styles.button1}>글쓰기</button>
-            </Link>
-            {isLoggedIn ? (
-              <button onClick={handleLogout} style={styles.button2}>
-                로그아웃
-              </button>
-            ) : (
-              <Link to="/signin">
-                <button style={styles.button2}>로그인</button>
+              {isLoggedIn ? (
+                <button onClick={handleLogout} style={styles.button2}>
+                  로그아웃
+                </button>
+              ) : (
+                <Link to="/signin">
+                  <button style={styles.button2}>로그인</button>
+                </Link>
+              )}
+            </>
+          ) : (
+            // WritePage가 아닐 경우
+            <>
+              <Link to="/writepage">
+                <button style={styles.button1}>글쓰기</button>
               </Link>
-            )}
-          </>
-        )}
-      </div>
-    </header>
+              {isLoggedIn ? (
+                <button onClick={handleLogout} style={styles.button2}>
+                  로그아웃
+                </button>
+              ) : (
+                <Link to="/signin">
+                  <button style={styles.button2}>로그인</button>
+                </Link>
+              )}
+            </>
+          )}
+        </div>
+      </header>
+    </div>
   );
 }
 
@@ -74,6 +78,7 @@ const styles = {
     boxSizing: "border-box",  
     overflow: "hidden",  
     flexWrap: "wrap",
+    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
   },
   title: {
     fontSize: "24px",

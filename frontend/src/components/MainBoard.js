@@ -37,40 +37,142 @@ function Board() {
 
     */
 
-    return (
-      <div style={styles.boardContainer}>
-        <h2 style={styles.title}>게시판</h2>
-        {companies.map((company, index) => (
-          <PostList key={index} company={company} />
-        ))}
-      </div>
+      return (
+        <div style={styles.mainContainer}>
+            <div style={styles.boardContainer}>
+                <h2 style={styles.title}>회사 게시판</h2>
+                <div style={styles.cardContainer}>
+                    {companies.map((company, index) => (
+                        <div key={index} style={styles.card}>
+                            <div style={styles.logoContainer}>
+                                {/*추후 회사별 로고 사진 추가*/}
+                                <img src={`path/to/logo_${company.id}.png`} alt={`${company.name} 로고`} style={styles.logo} />
+                            </div>
+                            <h3 style={styles.companyName}>{company.name}</h3>
+                            <PostList company={company} />
+                            {/*더보기 버튼 클릭 시 해당 게시판으로 이동하는 기능 추후 추가 */}
+                            <button style={styles.viewButton}>더보기</button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
-  }
+}
 
 const styles = {
-  boardContainer: {
+  mainContainer: {
+    fontFamily: "'Roboto', sans-serif",
+    backgroundColor: "#f0f4f8", 
+    minHeight: "100vh",
+    marginTop: "60px",
     padding: "30px",
-    display: "flex",
-    justifyContent: "center",
+  },
+  boardContainer: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "40px",
     alignItems: "center",
-    flexDirection: "column",
-    margin: "40px auto",
-    maxWidth: "900px",
-    width: "100%",
-    border: "1.25px solid rgba(0, 0, 0, 0.2)",
-    borderRadius: "8px", 
-    boxSizing: "border-box",
-    marginTop: "90px",
+    backgroundColor: "#ffffff",
+    borderRadius: "15px",
+    boxShadow: "0 16px 40px rgba(0, 0, 0, 0.1)", 
+    transition: "box-shadow 0.3s ease",
   },
   title: {
-    textAlign: "left",
-    width: "100%",
-    fontSize: "34px",
+    fontSize: "38px",
     fontWeight: "700",
-    marginTop: "-10px",
+    marginBottom: "40px",
+    color: "#2e2e2e", 
+    textAlign: "center",
+  },
+  cardContainer: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+    gap: "20px",
+    padding: "0 20px",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: "15px",
+    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.13)",
+    padding: "30px",
+    cursor: "pointer",
+    overflow: "hidden",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "auto",
+    border: "1px solid rgba(0, 0, 0, 0.05)",
+    position: "relative",
   },
   
+  logoContainer: {
+    height: "80px",
+    marginBottom: "20px",
+  },
+  logo: {
+    maxHeight: "100%",
+    maxWidth: "100%",
+    objectFit: "contain",
+  },
+  companyName: {
+    fontSize: "24px",
+    fontWeight: "500",
+    marginBottom: "15px",
+    color: "#333",
+    textTransform: "uppercase",
+    letterSpacing: "1px",
+    textAlign: "center", 
+  },
+  viewButton: {
+    marginTop: "20px",
+    padding: "10px 18px", 
+    fontSize: "14px",
+    fontWeight: "bold",
+    background: "linear-gradient(45deg, #0077b6,rgb(1, 176, 211))", 
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    display: "block", 
+    width: "100%",
+  },
+
+  // 미디어 쿼리 추가
+  "@media (max-width: 1024px)": {
+    boardContainer: {
+      padding: "30px",  
+    },
+    title: {
+      fontSize: "28px", 
+    },
+  },
+
+  "@media (max-width: 768px)": {
+    card: {
+      padding: "20px",
+      marginBottom: "20px",  
+    },
+    viewButton: {
+      fontSize: "14px",  
+      padding: "10px 20px",  
+    },
+  },
+
+  "@media (max-width: 480px)": {
+    cardContainer: {
+      gridTemplateColumns: "1fr",  
+      padding: "0 10px", 
+    },
+    logoContainer: {
+      height: "60px",  
+    },
+    companyName: {
+      fontSize: "24px",
+    },
+  },
 };
-  
 
 export default Board;

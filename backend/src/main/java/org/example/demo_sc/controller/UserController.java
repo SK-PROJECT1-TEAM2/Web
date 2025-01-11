@@ -5,14 +5,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.demo_sc.dto.UserDto;
 import org.example.demo_sc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * - 인증없이 접근가능함 : 로그인, 회원가입
@@ -25,32 +23,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // 로그인
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @PostMapping("/login_process")
-    public ResponseEntity<String> loginProcess(@RequestBody UserDto userDto) {
-        try {
-            System.out.println("로그인 요청: " + userDto.getEmail()); // 디버깅 로그
-            boolean isAuthenticated = userService.authenticate(userDto.getEmail(), userDto.getPassword());
-    
-            if (isAuthenticated) {
-                System.out.println("로그인 성공: " + userDto.getEmail());
-                return ResponseEntity.ok("로그인 성공");
-            } else {
-                System.out.println("로그인 실패: " + userDto.getEmail());
-                return ResponseEntity.status(401).body("이메일 또는 비밀번호가 잘못되었습니다.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("서버 오류가 발생했습니다.");
-        }
-    }
-
-    
+//    // 로그인
+//    @GetMapping("/login")
+//    public String login() {
+//        return "login";
+//    }
 
     // 회원가입
     @GetMapping("/signup")
@@ -59,22 +36,19 @@ public class UserController {
     }
 
     // 회원가입 처리
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup_process")
-    // public String signup_process(@RequestBody UserDto userDto) {
-    //     // 1. 전달 데이터 확인
-    //     System.out.println("회원 가입용 데이터 전달 : "+userDto.toString());
-    //     // 2. 서비스를 이용하여 회원가입 처리 UserService 처리 -> DI
-    //     userService.create( userDto );
-    //     // 3. 회원가입 성공후 로그인 이동
-    //     return "redirect:/login"; // or "redirect:/" <= 홈으로 포워딩 -> 보안걸려서 -> 로그인이동함
-    // }
-    public ResponseEntity<String> signup_process(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> signup(@RequestBody UserDto userDto) {
+        // 1. 전달된 데이터 확인
+        System.out.println("회원가입 요청 데이터: " + userDto);
+
+        // 2. 서비스에서 회원가입 처리 (UserService)
         try {
-            userService.create(userDto);
-            return ResponseEntity.ok("회원가입 성공"); // 200 OK 상태 반환
+            userService.create(userDto);  // 사용자 생성 로직
+            return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공!");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("회원가입 실패");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원가입 실패! 다시 시도해주세요.");
         }
     }
 

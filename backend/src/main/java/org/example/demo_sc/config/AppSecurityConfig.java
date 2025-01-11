@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
 @Configuration
@@ -18,7 +20,7 @@ public class AppSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors().and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/signup", "/signup_process", "/css/**", "/js/**", "/api/articles").permitAll()
                         .requestMatchers("/mypage", "/write-post", "/api/articles/**", "/board", "/company/**").authenticated()
@@ -29,6 +31,11 @@ public class AppSecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
+                        .successHandler((request, response, authentication) -> {
+                            response.setContentType("application/json");
+                            String jsonResponse = "Login Success";
+                            response.getWriter().write(jsonResponse);
+                        })
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -52,5 +59,20 @@ public class AppSecurityConfig {
                 .passwordEncoder(passwordEncoder())
                 .and()
                 .build();
+    }
+
+    // CORS 설정을 명확히 하기 위해 별도의 설정 클래스를 추가할 수 있습니다.
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")  // React 서버 주소
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }

@@ -54,18 +54,15 @@ public class HomeController {
         return "board";
     }
 
-
-
-
     // 특정 회사 게시판 페이지
-    @GetMapping("/company/{companyName}")
-    public String showCompanyBoard(@PathVariable String companyName,
+    @GetMapping("/company/{companyId}")
+    public String showCompanyBoard(@PathVariable Integer companyId,
                                    @RequestParam(value = "keyword", required = false) String keyword,
                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                    Model model) {
         // 회사 정보 조회
-        Company company = companyRepository.findByCompanyName(companyName)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid company name: " + companyName));
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid company name: " + companyId));
 
 
         // 페이지 및 정렬 설정

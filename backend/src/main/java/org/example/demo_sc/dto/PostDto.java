@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDto {
+    private String userName; // 추가
     private Integer postNo;
     private Integer user_no; // 작성자 ID
     private Integer company_no; // 회사 ID
@@ -25,6 +26,13 @@ public class PostDto {
         this.postNo = post.getPostNo();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.createdAt = post.getCreatedAt();
+        this.user_no = post.getUser().getUser_no();
         // 필요한 필드에 대해 추가적으로 매핑
+
+        // ★ userName 추가
+        if (post.getUser() != null) {
+            this.userName = post.getUser().getDisplayName(); // 혹은 getEmail()
+        }
     }
 }

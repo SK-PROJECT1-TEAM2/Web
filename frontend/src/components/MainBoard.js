@@ -1,55 +1,185 @@
-// 게시판 구성
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import PostList from "./PostList";
 
-import React, {useState, useEffect} from "react";
+// function Board() {
+//   const [companies, setCompanies] = useState([]);
+
+//   useEffect(() => {
+//     axios
+//       .get("http://localhost:8080/api/companies")
+//       .then((response) => {
+//         console.log("받아온 데이터:", response.data);
+
+//         if (Array.isArray(response.data)) {
+//           const transformed = response.data.map((company) => ({
+//             companyNo: company.companyNo,
+//             companyName: company.companyName,
+//             posts: company.posts?.map((post) => ({
+//               postNo: post.postNo,
+//               title: post.title || "제목 없음",
+//               createdAt: post.createdAt || "날짜 없음",
+//               user: post.user?.email || "작성자 없음",
+//             })) || [],
+//           }));
+
+//           setCompanies(transformed);
+//         } else {
+//           console.error("응답 데이터가 배열이 아닙니다:", response.data);
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("데이터 호출 오류:", error);
+//       });
+//   }, []);
+
+//   if (!companies.length) {
+//     return <div>데이터를 불러오는 중입니다...</div>;
+//   }
+
+//   return (
+//     <div style={styles.boardContainer}>
+//       <h2 style={styles.heading}>게시판</h2>
+//       {companies.map((company) => (
+//         <PostList key={company.companyNo} company={company} />
+//       ))}
+//     </div>
+//   );
+// }
+
+// const styles = {
+//   boardContainer: {
+//     padding: "30px 20px",
+//     margin: "20px auto",
+//     maxWidth: "1100px",
+//     width: "95%",
+//     boxSizing: "border-box",
+//   },
+//   heading: {
+//     textAlign: "center",
+//     fontSize: "2rem",
+//     marginBottom: "20px",
+//   },
+//   // 반응형 스타일링 추가
+//   "@media (max-width: 768px)": {
+//     boardContainer: {
+//       padding: "20px 15px",
+//       margin: "10px auto",
+//       width: "100%",
+//     },
+//     heading: {
+//       fontSize: "1.5rem",
+//     },
+//   },
+// };
+
+// export default Board;
+
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import PostList from "./PostList";
 
-// 추후 벡엔드와 연결하여 동적으로 데이터를 받아옴
-// useEffect, useState 훅 사용
-// axios 라이브러리를 통한 통신
-// 불러온 데이터(회사 이름)을 클릭하면 해당 회사 게시판으로 이동
-// const companies = [
-//     {id:1, name: "회사1", posts: [{ title: "글1-1", time: "12:34", user: "username1" }, { title: "글2-1", time: "12:33", user: "username2" }, { title: "글3-1", time: "12:32", user: "username3" }] },
-//     {id:2, name: "회사2", posts: [{ title: "글1-2", time: "12:34", user: "username1" }, { title: "글2-2", time: "12:33", user: "username2" }, { title: "글3-2", time: "12:32", user: "username3" }] },
-//     {id:3, name: "회사3", posts: [{ title: "글1-3", time: "12:34", user: "username1" }, { title: "글2-3", time: "12:33", user: "username2" }, { title: "글3-3", time: "12:32", user: "username3" }] },
-// ];
-
 function Board() {
-    const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const navigate = useNavigate(); // useNavigate 추가
 
-    useEffect(() => {
-      // 백엔드 호출
-      axios.get("http://localhost:8080/api/companies") // API 경로 확인 필요
-          .then((response) => {
-              const recentThree = response.data.map((company) => ({
-                  ...company,
-                  posts: company.posts
-                      .sort((a, b) => new Date(b.time) - new Date(a.time)) // 최신순 정렬
-                      .slice(0, 3), // 최신 글 3개만 가져오기
-              }));
-              setCompanies(recentThree);
-          })
-          .catch((error) => {
-              console.error("데이터 호출 오류:", error);
-          });
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/companies")
+      .then((response) => {
+        console.log("받아온 데이터:", response.data);
+
+        if (Array.isArray(response.data)) {
+          const transformed = response.data.map((company) => ({
+            companyNo: company.companyNo,
+            companyName: company.companyName,
+            posts: company.posts?.map((post) => ({
+              postNo: post.postNo,
+              title: post.title || "제목 없음",
+              createdAt: post.createdAt || "날짜 없음",
+              user: post.user?.email || "작성자 없음",
+            })) || [],
+          }));
+
+          setCompanies(transformed);
+        } else {
+          console.error("응답 데이터가 배열이 아닙니다:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("데이터 호출 오류:", error);
+      });
   }, []);
 
-    return (
-      <div style={styles.boardContainer}>
-        <h2>게시판</h2>
-        {companies.map((company, index) => (
-          <PostList key={index} company={company} />
-        ))}
-      </div>
-    );
+  if (!companies.length) {
+    return <div>데이터를 불러오는 중입니다...</div>;
   }
 
+  const handleCompanyClick = (companyNo) => {
+    navigate(`/Company/${companyNo}`); // 클릭한 회사로 이동
+  };
+
+  return (
+    <div style={styles.boardContainer}>
+      <h2 style={styles.heading}>게시판</h2>
+      {companies.map((company) => (
+        <div
+          key={company.companyNo}
+          style={styles.companyContainer}
+          onClick={() => handleCompanyClick(company.companyNo)} // 회사 클릭 시 이동
+        >
+          {/* <h3 style={styles.companyName}>{company.companyName}</h3> */}
+          <PostList company={company} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const styles = {
-  boardContainer:{
-      padding: "30px 50px",
-      margin: "40px 350px",
-      maxWidth: "1100px",
-      width: "95%", 
+  boardContainer: {
+    padding: "30px 20px",
+    margin: "20px auto",
+    maxWidth: "1100px",
+    width: "95%",
+    boxSizing: "border-box",
+  },
+  heading: {
+    textAlign: "left",
+    marginLeft: "15px",
+    fontSize: "2rem",
+    marginBottom: "20px",
+  },
+  companyContainer: {
+    cursor: "pointer",
+    marginBottom: "20px",
+    padding: "10px",
+    border: "1px solid #ddd",
+    borderRadius: "5px",
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+    transition: "background-color 0.3s ease",
+  },
+  companyName: {
+    marginBottom: "10px",
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    color: "#007bff",
+    textDecoration: "underline",
+  },
+  // 반응형 스타일링 추가
+  "@media (max-width: 768px)": {
+    boardContainer: {
+      padding: "20px 15px",
+      margin: "10px auto",
+      width: "100%",
+    },
+    heading: {
+      fontSize: "1.5rem",
+    },
+    companyName: {
+      fontSize: "1.2rem",
+    },
   },
 };
 

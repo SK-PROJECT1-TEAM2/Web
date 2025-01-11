@@ -1,7 +1,6 @@
 package org.example.demo_sc.controller;
 
 import jakarta.transaction.Transactional;
-import org.example.demo_sc.dto.PostDto;
 import org.example.demo_sc.entity.*;
 import org.example.demo_sc.exception.UserNotFoundException;
 import org.example.demo_sc.repository.AttachmentRepository;
@@ -11,7 +10,6 @@ import org.example.demo_sc.repository.UserRepository;
 import org.example.demo_sc.repository.MentorRepository;
 import org.example.demo_sc.service.FileService;
 import org.example.demo_sc.service.PostService;
-import org.hibernate.Hibernate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.security.Principal;
-import java.util.List;
 
+@RestController
 @Controller
 @RequestMapping("/mypage")
 public class MyPageController {
@@ -50,30 +52,13 @@ public class MyPageController {
 
     @Transactional
     @GetMapping
-    public String mypage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (userDetails == null) {
-            return "redirect:/login"; // 비로그인 상태 시 로그인 페이지로 리다이렉트
-        }
+    public Map<String, Object> mypage(@AuthenticationPrincipal UserDetails userDetails) {
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) userDetails;
+        response.put("username", user.getDisplayName());
+        response.put("email", user.getUsername());
 
-        // UserDetails를 User로 캐스팅
-        if (userDetails instanceof User) {
-            User user = (User) userDetails;
-
-
-            // 사용자 이름과 이메일을 모델에 추가
-            model.addAttribute("username", user.getDisplayName()); // User의 사용자 이름 필드
-            model.addAttribute("email", user.getEmail());       // User의 이메일 필드
-
-            // 멘토등록정보 가져오기
-            List<Mentor> mentors = mentorRepository.findAllByUser(user);
-            model.addAttribute("mentors", mentors);
-
-
-        } else {
-            throw new IllegalStateException("UserDetails는 User로 변환할 수 없습니다.");
-        }
-
-        return "mypage"; // mypage.html 템플릿
+        return response;
     }
 
     // 'MENTOR REGISTER' 게시글 작성 페이지

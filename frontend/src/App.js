@@ -10,6 +10,7 @@ import Article from "./components/Article";
 import Signin from './components/Signin';
 import Signup from './components/Signup';
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState(""); // 상태 선언 추가
@@ -22,12 +23,6 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  useEffect(() => {
-    fetch("http://localhost:8080/api/hello") // Spring Boot API 주소
-        .then((response) => response.text())
-        .then((data) => setMessage(data))
-        .catch((error) => console.error("Error:", error));
-}, []);
 
   return (
     <Router>

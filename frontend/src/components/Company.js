@@ -78,29 +78,32 @@ function Company() {
 
 const styles = {
   container: {
-    padding: "30px 50px",
-    margin: "40px auto",
+    padding: "20px",
+    margin: "20px auto",
     maxWidth: "1100px",
-    width: "90%",
+    width: "95%",
     boxSizing: "border-box",
   },
   companyName: {
+    marginTop: "10px",
     fontSize: "2rem",
-    marginBottom: "30px",
+    marginBottom: "50px",
     textAlign: "left",
     marginLeft: "15px",
     fontWeight: "bold",
   },
   post: {
     marginBottom: "20px",
+    padding: "10px",
     border: "1px solid #ddd",
-    borderRadius: "8px",
+    borderRadius: "5px",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     cursor: "pointer",
     transition: "transform 0.2s, box-shadow 0.2s",
   },
   postTitle: {
     marginLeft: "15px",
+    marginTop: "15px",
     fontSize: "1.5rem",
     fontWeight: "bold",
   },

@@ -139,7 +139,8 @@ function Board() {
 
 const styles = {
   boardContainer: {
-    padding: "30px 20px",
+    paddingLeft: "20px",
+    paddingRight: "20px",
     margin: "20px auto",
     maxWidth: "1100px",
     width: "95%",
@@ -148,8 +149,9 @@ const styles = {
   heading: {
     textAlign: "left",
     marginLeft: "15px",
+    marginTop: "50px",
     fontSize: "2rem",
-    marginBottom: "20px",
+    marginBottom: "50px",
   },
   companyContainer: {
     cursor: "pointer",

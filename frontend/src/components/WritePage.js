@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header"; 
+import axios from "axios"; // Axios 사용
 
 function WritePage({ isLoggedIn, onLogout }) { 
   const [company, setCompany] = useState("");
+  const [companies, setCompanies] = useState([]); // 회사 목록 저장
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
     alignment: "left",
@@ -11,6 +13,22 @@ function WritePage({ isLoggedIn, onLogout }) {
     font: "폰트 선택",
     fontSize: "크기 선택",
   });
+
+  useEffect(() => {
+    // 백엔드에서 회사 목록 가져오기
+    axios
+      .get("http://localhost:8080/api/companies") // 백엔드 API URL
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setCompanies(response.data); // 데이터 설정
+        } else {
+          console.error("응답 데이터가 배열이 아닙니다:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("회사 목록을 불러오는 중 오류 발생:", error);
+      });
+  }, []);
 
   const handleCompanyChange = (e) => {
     setCompany(e.target.value);
@@ -42,11 +60,14 @@ function WritePage({ isLoggedIn, onLogout }) {
       <Header page="writepage" selectedCompany={company} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div style={styles.container}>
         <div style={styles.toolbar}>
+          {/* 회사명 선택 드롭다운 */}
           <select onChange={handleCompanyChange} value={company} style={styles.select}>
             <option value="">회사명 선택</option>
-            <option value="1">회사1</option>
-            <option value="2">회사2</option>
-            <option value="3">회사3</option>
+            {companies.map((c) => (
+              <option key={c.companyNo} value={c.companyNo}>
+                {c.companyName}
+              </option>
+            ))}
           </select>
           <select onChange={handleFontChange} value={formData.font} style={styles.select}>
             <option value="">폰트 선택</option>
@@ -116,7 +137,7 @@ const styles = {
   },
   toolbar: {
     display: "flex",
-    flexWrap: "wrap", // 반응형 대응
+    flexWrap: "wrap",
     gap: "10px",
     marginBottom: "20px",
   },
@@ -158,26 +179,6 @@ const styles = {
   fileUpload: {
     marginTop: "10px",
     marginLeft: "10px",
-  },
-  // 반응형 스타일링
-  "@media (max-width: 768px)": {
-    container: {
-      padding: "15px",
-      margin: "10px",
-    },
-    titleInput: {
-      fontSize: "18px",
-    },
-    textArea: {
-      fontSize: "14px",
-      height: "200px",
-    },
-    toolbar: {
-      gap: "5px",
-    },
-    select: {
-      fontSize: "14px",
-    },
   },
 };
 

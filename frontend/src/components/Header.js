@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
   const navigate = useNavigate();
-  const companyPage = `/company/${selectedCompany}`;
+  const main_Page = `/`;
 
   const handleLogout = () => {
     onLogout();
@@ -29,7 +29,7 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
         <div style={styles.buttonContainer}>
           {page === "writepage" ? (
             <>
-              <Link to={companyPage}>
+              <Link to={main_Page}>
                 <button style={styles.button1}>글등록</button>
               </Link>
               {isLoggedIn ? (

@@ -54,9 +54,6 @@ public class HomeController {
         return "board";
     }
 
-
-
-
     // 특정 회사 게시판 페이지
     @GetMapping("/company/{companyId}")
     public String showCompanyBoard(@PathVariable Integer companyId,

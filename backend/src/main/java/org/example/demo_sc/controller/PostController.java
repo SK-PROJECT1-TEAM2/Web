@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/articles")
@@ -67,48 +68,40 @@ public class PostController {
         return postService.getPostById(id);
     }
 
-    // 게시물 작성
     @PostMapping("/post")
     public String submitPost(
             @RequestParam("title") String title,
-            @RequestParam("companyNo") Integer companyNo, // 회사 ID
+            @RequestParam("companyNo") Integer companyNo,
             @RequestParam("content") String content,
             @RequestParam("file") MultipartFile file,
-            Principal principal){
+            Principal principal) {
 
-        String email = principal.getName(); // 현재 로그인한 사용자의 이메일
-
-        // 사용자 정보 조회 (이메일 기준으로)
+        // 1) 로그인 사용자
+        String email = principal.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        // 회사 정보 조회
+        // 2) 회사 정보 조회
         Company company = companyRepository.findById(companyNo)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid company ID: " + companyNo));
 
-
-        // 게시글 생성
+        // 3) Post 엔티티 생성 및 저장
         Post post = new Post();
         post.setTitle(title);
         post.setCompany(company);
         post.setContent(content);
         post.setUser(user);
 
-        //게시글 저장
         Post savedPost = postRepository.save(post);
 
-        // 파일 저장 및 Attachment 생성
+        // 4) 첨부파일 처리
         if (!file.isEmpty()) {
             saveAttachment(file, savedPost);
         }
 
-        // 게시글 저장 위로 이동
-        //postRepository.save(post);
-
-        // 게시판으로 리다이렉트
-        return "redirect:/company/" + company.getCompanyName(); // 회사 이름을 URL 파라미터로 사용
+        // 5) 리다이렉트
+        return "redirect:/company/" + company.getCompanyName();
     }
-
 //    // 게시글 수정
 //    @PutMapping("/{id}")
 //    public ResponseEntity<String> updateArticle(

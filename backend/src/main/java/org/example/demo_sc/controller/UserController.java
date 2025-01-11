@@ -23,11 +23,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    // 로그인
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login";
-//    }
+   // 로그인
+   @GetMapping("/login")
+   public String login() {
+       return "login";
+   }
 
     // 회원가입
     @GetMapping("/signup")

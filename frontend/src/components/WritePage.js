@@ -6,6 +6,7 @@ function WritePage({ isLoggedIn, onLogout }) {
   const [company, setCompany] = useState("");
   const [companies, setCompanies] = useState([]); // 회사 목록 저장
   const [file, setFile] = useState(null);
+
   const [formData, setFormData] = useState({
     alignment: "left",
     title: "",
@@ -29,6 +30,38 @@ function WritePage({ isLoggedIn, onLogout }) {
         console.error("회사 목록을 불러오는 중 오류 발생:", error);
       });
   }, []);
+
+  // 제출 버튼 클릭 시 실행
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 1) FormData 객체 생성
+    const formDataToSend = new FormData();
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("content", formData.content);
+    formDataToSend.append("companyNo", company);
+
+    // 파일이 있으면 추가
+    if (file) {
+      formDataToSend.append("file", file);
+    }
+
+    // 2) Axios POST 요청
+    axios
+      .post("http://localhost:8080/api/articles/post", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data", 
+        },
+      })
+      .then((res) => {
+        console.log("글 작성 성공:", res.data);
+        // 글 작성 후 이동하거나, 알림 띄우는 등 처리
+        // 예) window.location.href = "/board"; 
+      })
+      .catch((err) => {
+        console.error("글 작성 오류:", err);
+      });
+  };
 
   const handleCompanyChange = (e) => {
     setCompany(e.target.value);
@@ -59,69 +92,76 @@ function WritePage({ isLoggedIn, onLogout }) {
     <div>
       <Header page="writepage" selectedCompany={company} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div style={styles.container}>
-        <div style={styles.toolbar}>
-          {/* 회사명 선택 드롭다운 */}
-          <select onChange={handleCompanyChange} value={company} style={styles.select}>
-            <option value="">회사명 선택</option>
-            {companies.map((c) => (
-              <option key={c.companyNo} value={c.companyNo}>
-                {c.companyName}
-              </option>
-            ))}
-          </select>
-          <select onChange={handleFontChange} value={formData.font} style={styles.select}>
-            <option value="">폰트 선택</option>
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Times New Roman">Times New Roman</option>
-          </select>
-          <select onChange={handleFontSizeChange} value={formData.fontSize} style={styles.select}>
-            <option value="">크기 선택</option>
-            <option value="12px">12px</option>
-            <option value="14px">14px</option>
-            <option value="16px">16px</option>
-            <option value="18px">18px</option>
-          </select>
-          <div style={styles.alignmentButtons}>
-            <button onClick={() => handleAlignmentChange("left")} style={styles.button}>
-              <i className="fas fa-align-left" style={styles.icon}></i>
-            </button>
-            <button onClick={() => handleAlignmentChange("center")} style={styles.button}>
-              <i className="fas fa-align-center" style={styles.icon}></i>
-            </button>
-            <button onClick={() => handleAlignmentChange("right")} style={styles.button}>
-              <i className="fas fa-align-right" style={styles.icon}></i>
-            </button>
+        <form onSubmit={handleSubmit}>
+          <div style={styles.toolbar}>
+            {/* 회사명 선택 드롭다운 */}
+            <select onChange={handleCompanyChange} value={company} style={styles.select}>
+              <option value="">회사명 선택</option>
+              {companies.map((c) => (
+                <option key={c.companyNo} value={c.companyNo}>
+                  {c.companyName}
+                </option>
+              ))}
+            </select>
+            <select onChange={handleFontChange} value={formData.font} style={styles.select}>
+              <option value="">폰트 선택</option>
+              <option value="Arial">Arial</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Times New Roman">Times New Roman</option>
+            </select>
+            <select onChange={handleFontSizeChange} value={formData.fontSize} style={styles.select}>
+              <option value="">크기 선택</option>
+              <option value="12px">12px</option>
+              <option value="14px">14px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+            </select>
+            <div style={styles.alignmentButtons}>
+              <button onClick={() => handleAlignmentChange("left")} style={styles.button}>
+                <i className="fas fa-align-left" style={styles.icon}></i>
+              </button>
+              <button onClick={() => handleAlignmentChange("center")} style={styles.button}>
+                <i className="fas fa-align-center" style={styles.icon}></i>
+              </button>
+              <button onClick={() => handleAlignmentChange("right")} style={styles.button}>
+                <i className="fas fa-align-right" style={styles.icon}></i>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <input
-          type="text"
-          name="title"
-          placeholder="제목을 입력하세요."
-          style={styles.titleInput}
-          onChange={handleChange}
-          value={formData.title}
-        />
-        <textarea
-          name="content"
-          placeholder="내용을 입력하세요."
-          style={{
-            ...styles.textArea,
-            textAlign: formData.alignment,
-            fontFamily: formData.font,
-            fontSize: formData.fontSize,
-          }}
-          onChange={handleChange}
-          value={formData.content}
-        ></textarea>
-        <div style={styles.fileUpload}>
-          <p>파일 첨부</p>
-          <input 
-            type="file" 
-            onChange={handleFileChange}
+          <input
+            type="text"
+            name="title"
+            placeholder="제목을 입력하세요."
+            style={styles.titleInput}
+            onChange={handleChange}
+            value={formData.title}
           />
-        </div>
+          <textarea
+            name="content"
+            placeholder="내용을 입력하세요."
+            style={{
+              ...styles.textArea,
+              textAlign: formData.alignment,
+              fontFamily: formData.font,
+              fontSize: formData.fontSize,
+            }}
+            onChange={handleChange}
+            value={formData.content}
+          ></textarea>
+          <div style={styles.fileUpload}>
+            <p>파일 첨부</p>
+            <input 
+              type="file" 
+              onChange={handleFileChange}
+            />
+          </div>
+
+          {/* 제출 버튼 */}
+          <button type="submit" style={styles.submitButton}>
+            작성 완료
+          </button>
+        </form>
       </div>
     </div>
   );
@@ -179,6 +219,12 @@ const styles = {
   fileUpload: {
     marginTop: "10px",
     marginLeft: "10px",
+  },
+  submitButton: {
+    marginTop: "10px",
+    padding: "10px 20px",
+    fontSize: "16px",
+    cursor: "pointer",
   },
 };
 

@@ -1,77 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+// import React, { useState, useEffect } from "react";
+// import { useParams } from "react-router-dom";
+// import axios from "axios";
 
-// 더미 데이터
-const dummyCompanies = [
-  {
-    id: 1,
-    name: "회사1",
-    posts: [
-      { title: "글1-1", content: "내용1", user: "username1", time: "2025-01-06 12:34" },
-      { title: "글2-1", content: "내용2", user: "username2", time: "2025-01-06 12:33" },
-      { title: "글3-1", content: "내용3", user: "username3", time: "2025-01-06 12:32" },
-    ],
-  },
-  {
-    id: 2,
-    name: "회사2",
-    posts: [
-      { title: "글1-2", content: "내용1", user: "username1", time: "2025-01-06 12:34" },
-      { title: "글2-2", content: "내용2", user: "username2", time: "2025-01-06 12:33" },
-      { title: "글3-2", content: "내용3", user: "username3", time: "2025-01-06 12:32" },
-    ],
-  },
-  {
-    id: 3,
-    name: "회사3",
-    posts: [
-      { title: "글1-3", content: "내용1", user: "username1", time: "2025-01-06 12:34" },
-      { title: "글2-3", content: "내용2", user: "username2", time: "2025-01-06 12:33" },
-      { title: "글3-3", content: "내용3", user: "username3", time: "2025-01-06 12:32" },
-    ],
-  },
-];
+// function Company() {
+//   const { id } = useParams(); // URL 파라미터 :id
+//   const [company, setCompany] = useState(null);
+//   const [error, setError] = useState(false);
+
+//   useEffect(() => {
+//     // /api/companies/{id} 로 단일 회사 정보 가져오기
+//     axios
+//       .get(`http://localhost:8080/api/companies/${id}`)
+//       .then((res) => {
+//         setCompany(res.data);
+//       })
+//       .catch((err) => {
+//         console.error("회사 상세 불러오기 오류:", err);
+//         setError(true);
+//       });
+//   }, [id]);
+
+//   if (error) {
+//     return <div>회사를 찾을 수 없습니다.</div>;
+//   }
+
+//   if (!company) {
+//     return <div>로딩 중...</div>;
+//   }
+
+//   return (
+//     <div style={styles.container}>
+//       <h2 style={styles.companyName}>{company.companyName}</h2>
+//       {/* 회사의 기타 정보나 게시글 목록 표시 가능 */}
+//       <p>회사 번호: {company.companyNo}</p>
+//       <p>생성일: {company.createdAt}</p>
+//     </div>
+//   );
+// }
+
+// const styles = {
+//   container: {
+//     padding: "20px",
+//     margin: "20px auto",
+//     maxWidth: "1100px",
+//     width: "95%",
+//     boxSizing: "border-box",
+//   },
+//   companyName: {
+//     marginTop: "10px",
+//     fontSize: "2rem",
+//     marginBottom: "20px",
+//     textAlign: "left",
+//     marginLeft: "15px",
+//     fontWeight: "bold",
+//   },
+// };
+
+// export default Company;
+
+
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import axios from "axios";
 
 function Company() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const [company, setCompany] = useState(null);
+  const { id } = useParams(); // URL 파라미터 :id
+  const location = useLocation();
+  const [company, setCompany] = useState(location.state?.company || null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const foundCompany = dummyCompanies.find((company) => company.id === parseInt(id));
-    if (foundCompany) {
-      setCompany(foundCompany);
-    } else {
-      navigate("/404");
+    if (!company) {
+      // /api/companies/{id} 로 단일 회사 정보 가져오기
+      axios
+        .get(`http://localhost:8080/api/companies/${id}`)
+        .then((res) => {
+          setCompany(res.data);
+        })
+        .catch((err) => {
+          console.error("회사 상세 불러오기 오류:", err);
+          setError(true);
+        });
     }
-  }, [id, navigate]);
+  }, [id, company]);
+
+  if (error) {
+    return <div>회사를 찾을 수 없습니다.</div>;
+  }
 
   if (!company) {
-    return <div>회사를 찾을 수 없습니다.</div>;
+    return <div>로딩 중...</div>;
   }
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.companyName}>{company.name}</h2>
-      <div>
-        {company.posts
-          .sort((a, b) => new Date(b.time) - new Date(a.time))
-          .map((post, index) => (
-            <div
-              key={index}
-              style={styles.post}
-              onClick={() => navigate(`/Articles/${index}`)}
-            >
-              <h3 style={styles.postTitle}>{post.title}</h3>
-              <p style={styles.postContent}>{post.content}</p>
-              <div style={styles.postDetails}>
-                <span>{post.user}</span>
-                <span>{post.time}</span>
-              </div>
-            </div>
-          ))}
-      </div>
+      <h2 style={styles.companyName}>{company.companyName}</h2>
+      {/* 회사의 기타 정보나 게시글 목록 표시 가능 */}
+      <p>회사 번호: {company.companyNo}</p>
+      <p>생성일: {company.createdAt}</p>
     </div>
   );
 }
@@ -87,60 +113,10 @@ const styles = {
   companyName: {
     marginTop: "10px",
     fontSize: "2rem",
-    marginBottom: "50px",
+    marginBottom: "20px",
     textAlign: "left",
     marginLeft: "15px",
     fontWeight: "bold",
-  },
-  post: {
-    marginBottom: "20px",
-    padding: "10px",
-    border: "1px solid #ddd",
-    borderRadius: "5px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer",
-    transition: "transform 0.2s, box-shadow 0.2s",
-  },
-  postTitle: {
-    marginLeft: "15px",
-    marginTop: "15px",
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-  },
-  postContent: {
-    marginLeft: "30px",
-    fontSize: "1rem",
-    color: "#555",
-  },
-  postDetails: {
-    display: "flex",
-    justifyContent: "space-between",
-    fontSize: "0.9rem",
-    color: "#888",
-    margin: "15px"
-  },
-  // 반응형 스타일링
-  "@media (max-width: 768px)": {
-    container: {
-      padding: "20px",
-      margin: "20px auto",
-      width: "95%",
-    },
-    companyName: {
-      fontSize: "2rem",
-    },
-    post: {
-      padding: "10px",
-    },
-    postTitle: {
-      fontSize: "1rem",
-    },
-    postContent: {
-      fontSize: "0.9rem",
-    },
-    postDetails: {
-      fontSize: "0.8rem",
-    },
   },
 };
 

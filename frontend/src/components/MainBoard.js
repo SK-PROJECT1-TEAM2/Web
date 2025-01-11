@@ -1,9 +1,11 @@
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 // import PostList from "./PostList";
 
 // function Board() {
 //   const [companies, setCompanies] = useState([]);
+//   const navigate = useNavigate(); // useNavigate 추가
 
 //   useEffect(() => {
 //     axios
@@ -37,11 +39,22 @@
 //     return <div>데이터를 불러오는 중입니다...</div>;
 //   }
 
+//   const handleCompanyClick = (companyNo) => {
+//     navigate(`/Company/${companyNo}`); // 클릭한 회사로 이동
+//   };
+
 //   return (
 //     <div style={styles.boardContainer}>
 //       <h2 style={styles.heading}>게시판</h2>
 //       {companies.map((company) => (
-//         <PostList key={company.companyNo} company={company} />
+//         <div
+//           key={company.companyNo}
+//           style={styles.companyContainer}
+//           onClick={() => handleCompanyClick(company.companyNo)} // 회사 클릭 시 이동
+//         >
+//           {/* <h3 style={styles.companyName}>{company.companyName}</h3> */}
+//           <PostList company={company} />
+//         </div>
 //       ))}
 //     </div>
 //   );
@@ -49,16 +62,35 @@
 
 // const styles = {
 //   boardContainer: {
-//     padding: "30px 20px",
+//     paddingLeft: "20px",
+//     paddingRight: "20px",
 //     margin: "20px auto",
 //     maxWidth: "1100px",
 //     width: "95%",
 //     boxSizing: "border-box",
 //   },
 //   heading: {
-//     textAlign: "center",
+//     textAlign: "left",
+//     marginLeft: "15px",
+//     marginTop: "50px",
 //     fontSize: "2rem",
+//     marginBottom: "50px",
+//   },
+//   companyContainer: {
+//     cursor: "pointer",
 //     marginBottom: "20px",
+//     padding: "10px",
+//     border: "1px solid #ddd",
+//     borderRadius: "5px",
+//     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+//     transition: "background-color 0.3s ease",
+//   },
+//   companyName: {
+//     marginBottom: "10px",
+//     fontSize: "1.5rem",
+//     fontWeight: "bold",
+//     color: "#007bff",
+//     textDecoration: "underline",
 //   },
 //   // 반응형 스타일링 추가
 //   "@media (max-width: 768px)": {
@@ -69,6 +101,9 @@
 //     },
 //     heading: {
 //       fontSize: "1.5rem",
+//     },
+//     companyName: {
+//       fontSize: "1.2rem",
 //     },
 //   },
 // };
@@ -116,8 +151,8 @@ function Board() {
     return <div>데이터를 불러오는 중입니다...</div>;
   }
 
-  const handleCompanyClick = (companyNo) => {
-    navigate(`/Company/${companyNo}`); // 클릭한 회사로 이동
+  const handleCompanyClick = (company) => {
+    navigate(`/company/${company.companyNo}`, { state: { company } }); // 클릭한 회사로 이동
   };
 
   return (
@@ -127,9 +162,9 @@ function Board() {
         <div
           key={company.companyNo}
           style={styles.companyContainer}
-          onClick={() => handleCompanyClick(company.companyNo)} // 회사 클릭 시 이동
+          onClick={() => handleCompanyClick(company)} // 회사 클릭 시 이동
         >
-          {/* <h3 style={styles.companyName}>{company.companyName}</h3> */}
+          <h3 style={styles.companyName}>{company.companyName}</h3>
           <PostList company={company} />
         </div>
       ))}

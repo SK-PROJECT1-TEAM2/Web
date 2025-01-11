@@ -50,6 +50,7 @@ public class MyPageController {
         this.mentorRepository = mentorRepository;
     }
 
+    // 사용자 정보를 가져와 페이지에 표시 (이름, 이메일)
     @Transactional
     @GetMapping
     public Map<String, Object> mypage(@AuthenticationPrincipal UserDetails userDetails) {

@@ -1,59 +1,131 @@
-// 게시판 구성
-
-// import React, {useState, useEffect} from "react";
-// import axios from "axios";
-import PostList from "./PostList";
-
-// 추후 벡엔드와 연결하여 동적으로 데이터를 받아옴
-// useEffect, useState 훅 사용
-// axios 라이브러리를 통한 통신
-// 불러온 데이터(회사 이름)을 클릭하면 해당 회사 게시판으로 이동
-const companies = [
-    {id:1, name: "회사1", posts: [{ title: "글1-1", time: "12:34", user: "username1" }, { title: "글2-1", time: "12:33", user: "username2" }, { title: "글3-1", time: "12:32", user: "username3" }] },
-    {id:2, name: "회사2", posts: [{ title: "글1-2", time: "12:34", user: "username1" }, { title: "글2-2", time: "12:33", user: "username2" }, { title: "글3-2", time: "12:32", user: "username3" }] },
-    {id:3, name: "회사3", posts: [{ title: "글1-3", time: "12:34", user: "username1" }, { title: "글2-3", time: "12:33", user: "username2" }, { title: "글3-3", time: "12:32", user: "username3" }] },
-];
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Board() {
-    /*
-      const [companies, setCompanies] = useState([]);
-      useEffect(() => {
-        // 백엔드 호출
-        axios.get("/api/companies")  
-          .then((response) => {
-            // 최신 글 3개 호출
-            const recentThree = response.data.map((company) => ({
-              ...company,
-              posts: company.posts
-                  .sort((a, b) => new Date(b.time) - new Date(a.time))
-                  .slice(0, 3),              
-            }));
-            setCompanies(recentThree);
-          })
-          .catch((error) => {
-            console.log("데이터 호출 오류 : ", error);
-          });
-      }, []);
+  const navigate = useNavigate();
+  const [companies, setCompanies] = useState([]);
+  const [companyPosts, setCompanyPosts] = useState({}); // 각 회사에 대한 게시글을 저장할 객체
 
-    */
+  const getAllCompanies = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/companies');
+      const data = await response.json();
+      setCompanies(data); // 상태 업데이트
+      // 각 회사의 게시글을 가져오기
+      data.forEach((company) => {
+        getPostsByCompany(company.companyNo);
+      });
+    } catch (error) {
+      console.error('Error fetching companies:', error);
+    }
+  };
 
-    return (
-      <div style={styles.boardContainer}>
-        <h2>게시판</h2>
-        {companies.map((company, index) => (
-          <PostList key={index} company={company} />
-        ))}
-      </div>
-    );
-  }
+  const getPostsByCompany = async (companyNo) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/companies/${companyNo}/posts`);
+      const data = await response.json();
+      setCompanyPosts((prevPosts) => ({
+        ...prevPosts,
+        [companyNo]: data, // companyNo를 키로, 해당 회사의 게시글 데이터를 값으로 추가
+      }));
+    } catch (error) {
+      console.error(`Error fetching posts for company ${companyNo}:`, error);
+    }
+  };
+
+  useEffect(() => {
+    getAllCompanies();
+  }, []); // 컴포넌트가 처음 렌더링될 때 한 번만 호출
+
+  const handleCompanyClick = (companyNo) => {
+    navigate(`/company/${companyNo}`); // 클릭한 회사로 이동
+  };
+
+  console.log(companies)
+  console.log(companyPosts)
+
+  return (
+    <div style={styles.boardContainer}>
+      <h2 style={styles.heading}>게시판</h2>
+      {companies.map((company) => (
+        <div
+          key={company.companyNo}
+          style={styles.companyContainer}
+          onClick={() => handleCompanyClick(company.companyNo)} // 회사 클릭 시 이동
+        >
+          <h3 style={styles.companyName}>{company.companyName}</h3>
+          {/* 해당 회사의 게시글을 출력 */}
+          {companyPosts[company.companyNo] ? (
+            <ul style={styles.postList}>
+              {companyPosts[company.companyNo].length > 0 ? (
+                companyPosts[company.companyNo].map((post) => (
+                  <li key={post.postNo} style={styles.post}>
+                    <div style={styles.postTitle}>{post.title}</div>
+                    <div style={styles.postTitle}>{post.content}</div>
+                    <div style={styles.postDetails}>
+                      <span>{post.created_at}</span>
+                      <span>{post.user}</span>
+                    </div>
+                  </li>
+                ))
+              ) : (
+                <li style={styles.post}>게시글이 없습니다.</li>
+              )}
+            </ul>
+          ) : (
+            <p>게시글을 불러오는 중...</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const styles = {
-  boardContainer:{
-      padding: "30px 50px",
-      margin: "40px 350px",
-      maxWidth: "1100px",
-      width: "95%", 
+  boardContainer: {
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    margin: "20px auto",
+    maxWidth: "1100px",
+    width: "95%",
+    boxSizing: "border-box",
   },
+  heading: {
+    textAlign: "left",
+    marginLeft: "15px",
+    marginTop: "50px",
+    fontSize: "2rem",
+    marginBottom: "50px",
+  },
+  companyContainer: {
+    cursor: "pointer",
+    marginBottom: "20px",
+    padding: "10px",
+    border: "1px solid #ddd",
+    borderRadius: "5px",
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+    transition: "background-color 0.3s ease",
+  },
+  companyName: {
+    marginBottom: "10px",
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    color: "#007bff",
+    textDecoration: "underline",
+  },
+  postList: {
+    listStyle: "none",
+    padding: 0,
+    margin: 0,
+  },
+  post: {
+    display: "flex",
+    justifyContent: "space-between",
+    borderBottom: "1px solid #f0f0f0",
+    padding: "10px 0",
+  },
+  postTitle: { fontWeight: "bold" },
+  postDetails: { color: "#555" },
 };
 
 export default Board;

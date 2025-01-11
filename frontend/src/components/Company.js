@@ -58,10 +58,10 @@ function Company() {
         {company.posts
           .sort((a, b) => new Date(b.time) - new Date(a.time))
           .map((post, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               style={styles.post}
-              onClick={() => navigate(`/articles/${index}`)}  
+              onClick={() => navigate(`/Articles/${index}`)}
             >
               <h3 style={styles.postTitle}>{post.title}</h3>
               <p style={styles.postContent}>{post.content}</p>
@@ -70,7 +70,7 @@ function Company() {
                 <span>{post.time}</span>
               </div>
             </div>
-        ))}
+          ))}
       </div>
     </div>
   );
@@ -78,31 +78,69 @@ function Company() {
 
 const styles = {
   container: {
-    padding: "30px 50px",
-      margin: "40px 350px",
-      maxWidth: "1100px",
-      width: "95%", 
+    padding: "20px",
+    margin: "20px auto",
+    maxWidth: "1100px",
+    width: "95%",
+    boxSizing: "border-box",
   },
   companyName: {
-    fontSize: "36px",
+    marginTop: "10px",
+    fontSize: "2rem",
     marginBottom: "50px",
+    textAlign: "left",
+    marginLeft: "15px",
+    fontWeight: "bold",
   },
   post: {
     marginBottom: "20px",
-    padding: "15px",
+    padding: "10px",
     border: "1px solid #ddd",
-    borderRadius: "8px",
+    borderRadius: "5px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    cursor: "pointer",
+    transition: "transform 0.2s, box-shadow 0.2s",
   },
   postTitle: {
+    marginLeft: "15px",
+    marginTop: "15px",
     fontSize: "1.5rem",
     fontWeight: "bold",
   },
+  postContent: {
+    marginLeft: "30px",
+    fontSize: "1rem",
+    color: "#555",
+  },
   postDetails: {
-    marginTop: "10px",
-    fontSize: "0.9rem",
-    color: "#888",
     display: "flex",
     justifyContent: "space-between",
+    fontSize: "0.9rem",
+    color: "#888",
+    margin: "15px"
+  },
+  // 반응형 스타일링
+  "@media (max-width: 768px)": {
+    container: {
+      padding: "20px",
+      margin: "20px auto",
+      width: "95%",
+    },
+    companyName: {
+      fontSize: "2rem",
+    },
+    post: {
+      padding: "10px",
+    },
+    postTitle: {
+      fontSize: "1rem",
+    },
+    postContent: {
+      fontSize: "0.9rem",
+    },
+    postDetails: {
+      fontSize: "0.8rem",
+    },
   },
 };
 

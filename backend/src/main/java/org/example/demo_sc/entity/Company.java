@@ -42,4 +42,8 @@ public class Company {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+    public LocalDateTime getCreatedAt() {
+        return created_at;
+    }
 }

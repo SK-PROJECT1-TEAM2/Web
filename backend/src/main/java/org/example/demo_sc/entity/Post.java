@@ -6,6 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Table(name = "posts")
 @Setter
 @Getter
@@ -20,6 +22,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "user_no", nullable = false)
+    @JsonIgnore
     private User user; // 작성자
 
     @ManyToOne

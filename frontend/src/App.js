@@ -10,7 +10,7 @@ import Signin from './components/Signin';
 import Signup from './components/Signup';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 초기 상태를 false로 설정
 
   const handleLogin = () => {
     setIsLoggedIn(true);

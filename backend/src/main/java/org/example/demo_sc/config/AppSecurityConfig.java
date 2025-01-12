@@ -24,8 +24,6 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/signup", "/signup_process", "/css/**", "/js/**", "/api/articles").permitAll()
                         .requestMatchers("/mypage", "/write-post", "/api/articles/**", "/board", "/company/**").authenticated()
-                        .requestMatchers("/company/**").permitAll()
-                        .requestMatchers("/api/companies/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

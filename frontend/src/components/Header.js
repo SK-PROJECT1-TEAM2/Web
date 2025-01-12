@@ -1,13 +1,19 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
+function Header({ onSubmit, isLoggedIn, onLogout, page, selectedCompany }) {
   const navigate = useNavigate();
   const companyPage = `/company/${selectedCompany}`;
 
   const handleLogout = () => {
     onLogout();
     navigate("/");
+  };
+
+  const handleButtonClick = () => {
+    if(onSubmit) {
+      onSubmit();
+    }
   };
 
   return (
@@ -30,7 +36,7 @@ function Header({ isLoggedIn, onLogout, page, selectedCompany }) {
           {page === "writepage" ? (
             <>
               <Link to={companyPage}>
-                <button style={styles.button1}>글등록</button>
+                <button style={styles.button1} onClick={handleButtonClick}>글등록</button>
               </Link>
               {isLoggedIn ? (
                 <button onClick={handleLogout} style={styles.button2}>

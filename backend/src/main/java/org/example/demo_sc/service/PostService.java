@@ -1,5 +1,6 @@
 package org.example.demo_sc.service;
 
+import jakarta.transaction.Transactional;
 import org.example.demo_sc.dto.PostDto;
 import org.example.demo_sc.entity.Attachment;
 import org.example.demo_sc.entity.Company;

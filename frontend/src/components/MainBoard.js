@@ -41,9 +41,6 @@ function Board() {
     navigate(`/company/${companyNo}`); // 클릭한 회사로 이동
   };
 
-  console.log(companies)
-  console.log(companyPosts)
-
   return (
     <div style={styles.boardContainer}>
       <h2 style={styles.heading}>게시판</h2>

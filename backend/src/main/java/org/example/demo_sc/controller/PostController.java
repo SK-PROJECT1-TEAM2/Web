@@ -1,5 +1,6 @@
 package org.example.demo_sc.controller;
 
+import jakarta.transaction.Transactional;
 import org.example.demo_sc.dto.CommentDto;
 import org.example.demo_sc.dto.PostDto;
 import org.example.demo_sc.entity.Attachment;
@@ -29,7 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/api/articles")
 public class PostController {
 
@@ -67,40 +68,61 @@ public class PostController {
         return postService.getPostById(id);
     }
 
+    @GetMapping("/postRegister")
+    public String login() {
+        return "redirect:/api/articles/postRegister";
+    }
+
     // 게시물 작성
-    @PostMapping("/post")
-    public String submitPost(
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/postRegister")
+    public ResponseEntity<String> submitPost(
             @RequestParam("title") String title,
-            @RequestParam("companyNo") Integer companyNo,
+            @RequestParam("companyNo") Integer companyNo, // 회사 ID
             @RequestParam("content") String content,
             @RequestParam("file") MultipartFile file,
-            Principal principal) {
+            Principal principal) throws IOException {
 
-        // 1) 로그인 사용자
-        String email = principal.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        try {
+            System.out.println("Received");
+            System.out.println(title);
 
-        // 2) 회사 정보 조회
-        Company company = companyRepository.findById(companyNo)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid company ID: " + companyNo));
+            String email = principal.getName(); // 현재 로그인한 사용자의 이메일
 
-        // 3) Post 엔티티 생성 및 저장
-        Post post = new Post();
-        post.setTitle(title);
-        post.setCompany(company);
-        post.setContent(content);
-        post.setUser(user);
+            // 사용자 정보 조회 (이메일 기준으로)
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        Post savedPost = postRepository.save(post);
+            // 회사 정보 조회
+            Company company = companyRepository.findById(companyNo)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid company ID: " + companyNo));
 
-        // 4) 첨부파일 처리
-        if (!file.isEmpty()) {
-            saveAttachment(file, savedPost);
+
+            // 게시글 생성
+            Post post = new Post();
+            post.setTitle(title);
+            post.setCompany(company);
+            post.setContent(content);
+            post.setUser(user);
+
+            PostDto postDto = new PostDto(post);
+            System.out.println("xxx:" + postDto);
+
+            postService.createPostWithFile(postDto, file);
+
+            //게시글 저장
+            Post savedPost = postRepository.save(post);
+
+            // 파일 저장 및 Attachment 생성
+            if (!file.isEmpty()) {
+                saveAttachment(file, savedPost);
+            }
+
+            return ResponseEntity.ok("게시글이 성공적으로 등록되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace(); // 예외 발생 시 스택 트레이스 출력
+            return ResponseEntity.status(500).body("서버 오류");
         }
-
-        // 5) 리다이렉트
-        return "redirect:/company/" + company.getCompanyName();
     }
 
 //    // 게시글 수정

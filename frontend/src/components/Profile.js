@@ -7,7 +7,7 @@ function Profile() {
   useEffect(() => {
     fetch("http://localhost:8080/mypage", {
       method: "GET",
-      credentials: "include", // 세션 쿠키 포함
+      credentials: "include",
     })
       .then((response) => {
         if (response.ok) {
@@ -19,7 +19,7 @@ function Profile() {
       .then((data) => setUserInfo(data))
       .catch((error) => {
         console.error(error.message);
-        window.location.href = "/login"; // 로그인되지 않은 경우 로그인 페이지로 리디렉션
+        window.location.href = "/login";
       });
   }, []);
 
@@ -43,6 +43,10 @@ function Profile() {
           <span style={styles.infoLabel}>이메일</span>
           <span>{userInfo.email}</span>
         </div>
+        <div style={styles.infoRow}>
+          <span style={styles.infoLabel}>멘토 여부</span>
+          <span>✔️</span>
+        </div>
       </div>
     </div>
   );
@@ -61,10 +65,11 @@ const styles = {
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center", // 중앙 정렬
+    alignItems: "center",
+    minHeight: "600px", 
   },
   title: {
-    marginBottom: "20px",
+    marginBottom: "50px",
     fontSize: "28px",
     fontWeight: "bold",
     textAlign: "center",
@@ -76,24 +81,25 @@ const styles = {
     marginBottom: "20px",
   },
   image: {
+    marginBottom: "30px",
     width: "150px",
     height: "150px",
     borderRadius: "50%",
     border: "5px solid #ccc",
   },
   username: {
-    marginTop: "15px",
+    marginBottom: "0",
     fontSize: "20px",
     fontWeight: "bold",
   },
   infoBox: {
-    width: "70%", // container 내부에서 가득 채움
+    width: "70%",
     border: "1px solid #ccc",
     borderRadius: "10px",
     backgroundColor: "#fff",
     padding: "20px",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    marginTop: "10px",
+    marginTop: "40px",
   },
   infoRow: {
     display: "flex",
@@ -105,7 +111,7 @@ const styles = {
     fontWeight: "bold",
     color: "#555",
   },
-  // 반응형 스타일링
+
   "@media (max-width: 768px)": {
     container: {
       padding: "20px",

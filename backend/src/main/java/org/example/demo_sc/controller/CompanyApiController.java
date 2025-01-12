@@ -9,6 +9,7 @@ import org.example.demo_sc.repository.PostRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,14 @@ public class CompanyApiController {
         return posts.stream()
                 .map(PostDto::new) // Post -> PostDto 변환
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{companyNo}/all_posts")
+    public List<PostDto> getall_PostsByCompany(@PathVariable Integer companyNo) {
+        System.out.println("Request received for companyNo: " + companyNo); // 디버깅 로그
+        // 특정 회사의 게시글 데이터를 PostDto로 변환
+        List<Post> posts = postRepository.findByCompanyCompanyNoOrderByCreatedAtDesc(companyNo);
+        return posts.isEmpty() ? new ArrayList<>() : posts.stream().map(PostDto::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{companyNo}")

@@ -3,15 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 
 const dummyArticles = [
   {
-    id: 1,
+    id: 28,
     title: "글1-1",
-    content: "내용1\n\n" + 
-             "이것은 긴 글 예시입니다. \n" + 
-             "여러 줄로 이루어진 내용입니다.\n" + 
-             "여기에는 여러 문장이 있습니다.\n" +
-             "내용이 길어짐에 따라 화면의 하단으로 넘어가게 됩니다.\n\n" +
-             "추가적으로 더 많은 내용이 추가될 수 있습니다.\n" +
-             "이제 페이지가 내려가게 되며, 긴 내용이 어떻게 처리되는지 확인할 수 있습니다.\n",
+    content:
+      "내용1\n\n" +
+      "이것은 긴 글 예시입니다. \n" +
+      "여러 줄로 이루어진 내용입니다.\n" +
+      "여기에는 여러 문장이 있습니다.\n" +
+      "내용이 길어짐에 따라 화면의 하단으로 넘어가게 됩니다.\n\n" +
+      "추가적으로 더 많은 내용이 추가될 수 있습니다.\n" +
+      "이제 페이지가 내려가게 되며, 긴 내용이 어떻게 처리되는지 확인할 수 있습니다.\n",
     user: "username1",
     time: "2025-01-06 12:34",
     file: "파일1.pdf",
@@ -101,9 +102,7 @@ function Article() {
         <h2 style={styles.articleTitle}>{article.title}</h2>
         <p style={styles.articleContent}>{article.content}</p>
         <div style={styles.footer}>
-          {article.file && (
-            <div style={styles.file}>첨부파일: {article.file}</div>
-          )}
+          {article.file && <div style={styles.file}>첨부파일: {article.file}</div>}
           <div style={styles.details}>
             <span>{article.user}</span>
             <span>{article.time}</span>
@@ -146,14 +145,15 @@ function Article() {
 const styles = {
   container: {
     padding: "30px 50px",
-    margin: "40px 360px",
+    margin: "40px auto",
     maxWidth: "1080px",
     width: "93%",
+    border: "1px solid black",
   },
   main: {
     position: "relative",
     paddingBottom: "30px",
-    borderBottom : "3px solid #ddd"
+    borderBottom: "3px solid #ddd",
   },
   articleTitle: {
     fontSize: "2rem",
@@ -165,7 +165,7 @@ const styles = {
     marginBottom: "20px",
   },
   footer: {
-    display: "flex", 
+    display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     fontSize: "0.9rem",
@@ -186,10 +186,12 @@ const styles = {
     backgroundColor: "#f9f9f9",
   },
   commentInput: {
-    width: "97%",
-    height: "50px",
+    width: "98.5%",
+    height: "70px",
     marginBottom: "20px",
-    padding: "10px",
+    paddingLeft: "10px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
     fontSize: "1rem",
     border: "1px solid #ddd",
     borderRadius: "8px",
@@ -219,6 +221,23 @@ const styles = {
     color: "#888",
     display: "flex",
     justifyContent: "space-between",
+  },
+  "@media (max-width: 768px)": {
+    container: {
+      padding: "20px",
+      margin: "20px auto",
+      width: "90%",
+    },
+    articleTitle: {
+      fontSize: "1.5rem",
+    },
+    articleContent: {
+      fontSize: "1rem",
+    },
+    details: {
+      flexDirection: "column",
+      gap: "10px",
+    },
   },
 };
 

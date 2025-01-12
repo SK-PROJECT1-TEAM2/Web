@@ -6,6 +6,7 @@ import org.example.demo_sc.entity.Company;
 import org.example.demo_sc.entity.Post;
 import org.example.demo_sc.repository.CompanyRepository;
 import org.example.demo_sc.repository.PostRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -46,5 +47,23 @@ public class CompanyApiController {
         return posts.stream()
                 .map(PostDto::new) // Post -> PostDto 변환
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{companyNo}")
+    public ResponseEntity<?> getCompanyById(@PathVariable Integer companyNo) {
+        Company company = companyRepository.findById(companyNo)
+                .orElse(null);
+
+        if (company == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        CompanyDto companyDto = new CompanyDto(
+                company.getCompanyNo(),
+                company.getCompanyName(),
+                company.getCreatedAt().toString()
+        );
+
+        return ResponseEntity.ok(companyDto);
     }
 }

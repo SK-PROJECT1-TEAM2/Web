@@ -61,15 +61,14 @@ function Board() {
                 companyPosts[company.companyNo].map((post) => (
                   <li key={post.postNo} style={styles.post}>
                     <div style={styles.postTitle}>{post.title}</div>
-                    <div style={styles.postTitle}>{post.content}</div>
                     <div style={styles.postDetails}>
-                      <span>{post.created_at}</span>
-                      <span>{post.user}</span>
+                      <span>{post.createdAt}</span>
+                      <span>{post.userName}</span>
                     </div>
                   </li>
                 ))
               ) : (
-                <li style={styles.post}>게시글이 없습니다.</li>
+                <li style={styles.postTitle}>게시글이 없습니다.</li>
               )}
             </ul>
           ) : (
@@ -107,11 +106,14 @@ const styles = {
     transition: "background-color 0.3s ease",
   },
   companyName: {
-    marginBottom: "10px",
+    marginBottom: "5px",
+    marginLeft: "30px",
+    marginTop: "15px",
     fontSize: "1.5rem",
     fontWeight: "bold",
-    color: "#007bff",
-    textDecoration: "underline",
+    color: "black",
+    borderBottom: "2px solid #f0f0f0",
+    marginRight: "30px",
   },
   postList: {
     listStyle: "none",
@@ -121,11 +123,20 @@ const styles = {
   post: {
     display: "flex",
     justifyContent: "space-between",
-    borderBottom: "1px solid #f0f0f0",
     padding: "10px 0",
   },
-  postTitle: { fontWeight: "bold" },
-  postDetails: { color: "#555" },
+  postTitle: {
+    marginLeft: "18px",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    fontWeight: "bold",
+  },
+  postDetails: { 
+    color: "#555",
+    display: "flex",
+    gap: "10px",
+    marginRight: "38px",
+  },
 };
 
 export default Board;

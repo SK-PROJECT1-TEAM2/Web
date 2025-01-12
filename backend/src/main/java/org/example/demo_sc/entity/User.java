@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column( name = "user_name", nullable = false, length = 50) // 스네이크 표기법으로 컬럼 이름 지정
-    private String username; // 사용자 이름
+    private String displayName; // 사용자 이름
 
     @Column( updatable = false)
     private LocalDateTime created_at; // 생성 시간
@@ -66,7 +66,7 @@ public class User implements UserDetails {
     public User(String email, String password, String user_name) {
         this.email = email;
         this.password = password;
-        this.username = user_name;
+        this.displayName = user_name;
     }
 
 
@@ -97,7 +97,7 @@ public class User implements UserDetails {
         return password;
     }
     public String getDisplayName() {
-        return username; // 이름 반환
+        return this.displayName; // 이름 반환
     }
 
     @Override

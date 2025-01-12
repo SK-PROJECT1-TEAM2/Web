@@ -24,6 +24,8 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/signup", "/signup_process", "/css/**", "/js/**", "/api/articles").permitAll()
                         .requestMatchers("/mypage", "/write-post", "/api/articles/**", "/board", "/company/**").authenticated()
+                        .requestMatchers("/company/**").permitAll()
+                        .requestMatchers("/api/companies/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
@@ -61,7 +63,7 @@ public class AppSecurityConfig {
                 .build();
     }
 
-    // CORS 설정을 명확히 하기 위해 별도의 설정 클래스를 추가할 수 있습니다.
+    // CORS 설정을 명확히 하기 위해 별도의 설정 클래스를 추가
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

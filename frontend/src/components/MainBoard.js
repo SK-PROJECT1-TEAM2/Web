@@ -41,6 +41,25 @@ function Board() {
     navigate(`/company/${companyNo}`);
   };
 
+  const formatTime = (createdAt) => {
+    const now = new Date();
+    const created = new Date(createdAt);
+    const diffInSeconds = Math.floor((now - created) / 1000);
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds}초 전`;
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes}분 전`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours}시간 전`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days}일 전`;
+    }
+  };
+
   console.log(companies)
   console.log(companyPosts)
 
@@ -63,7 +82,7 @@ function Board() {
                     <div style={styles.postcontent}>{post.content}</div>
                     <div style={styles.postDetails}>
                       <span>{post.userName}</span>
-                      <span>{post.createdAt}</span>
+                      <span>{formatTime(post.createdAt)}</span>
                     </div>
                   </li>
                 ))

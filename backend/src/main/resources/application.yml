@@ -23,4 +23,4 @@ spring:
       max-request-size: 10MB
 
 file:
-  dir: C:\Users\dkswo\workspace\Ahn\demo_sc\src\main\resources\file_dir # 파일이 저장될 디렉토리
+  dir: C:\Users\r2com # 파일이 저장될 디렉토리

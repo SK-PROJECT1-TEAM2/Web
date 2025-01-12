@@ -26,7 +26,7 @@ public class UserController {
     // 로그인
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "";
     }
 
     // 회원가입

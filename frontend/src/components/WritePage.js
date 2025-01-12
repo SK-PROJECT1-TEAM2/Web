@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Axios 사용
+import { useNavigate } from "react-router-dom";
 
 function WritePage() {
+  const navigate = useNavigate();
   const [company, setCompany] = useState("");
   const [companies, setCompanies] = useState([]); // 회사 목록 저장
   const [file, setFile] = useState(null);
@@ -44,9 +46,9 @@ function WritePage() {
     // 파일이 있으면 추가
     if (file) {
       formDataToSend.append("file", file);
+    } else {
+      formDataToSend.append("file", new Blob()); // 빈 Blob 객체 추가
     }
-
-    console.log(formDataToSend);
 
     // 2) Axios POST 요청
     axios
@@ -57,9 +59,8 @@ function WritePage() {
         withCredentials: true
       })
       .then((res) => {
-        console.log("글 작성 성공:", res.data);
-        // 글 작성 후 이동하거나, 알림 띄우는 등 처리
-        // 예) window.location.href = "/board"; 
+        alert("글 작성 완료");
+        navigate("/");
       })
       .catch((err) => {
         console.error("글 작성 오류:", err);

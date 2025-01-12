@@ -60,8 +60,6 @@ function Board() {
     }
   };
 
-  console.log(companies)
-  console.log(companyPosts)
 
   return (
     <div style={styles.boardContainer}>
@@ -167,7 +165,6 @@ const styles = {
     color: "#555",
     display: "flex",
     gap: "10px",
-    display: "flex",
     justifyContent: "space-between",
     fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },

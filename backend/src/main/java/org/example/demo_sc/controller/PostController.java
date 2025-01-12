@@ -15,6 +15,7 @@ import org.example.demo_sc.service.FileService;
 import org.example.demo_sc.service.PostService;
 import org.example.demo_sc.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -68,10 +69,12 @@ public class PostController {
             @RequestParam("title") String title,
             @RequestParam("companyNo") Integer companyNo,
             @RequestParam("content") String content,
-            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "file", required = false) MultipartFile file,
             Principal principal) {
 
         System.out.println("테스트");
+        System.out.println(file.getOriginalFilename());
+
         // 1) 로그인 사용자
         String email = principal.getName();
         User user = userRepository.findByEmail(email)
@@ -91,11 +94,15 @@ public class PostController {
         Post savedPost = postRepository.save(post);
 
         // 4) 첨부파일 처리
-        if (!file.isEmpty()) {
-            saveAttachment(file, savedPost);
+        // 빈 파일이 넘어올 시 이름을 blob으로 처리하여 빈 파일 처리
+        if (file.getOriginalFilename() != "blob") {
+            try {
+                saveAttachment(file, savedPost);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("첨부파일 저장 오류: " + e.getMessage());
+            }
         }
-
-        return ResponseEntity.ok(savedPost);
+        return ResponseEntity.ok("게시글이 등록되었습니다.");
     }
 //    // 게시글 수정
 //    @PutMapping("/{id}")

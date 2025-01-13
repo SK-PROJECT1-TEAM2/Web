@@ -1,39 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-const dummyArticles = [
-  {
-    id: 28,
-    title: "글1-1",
-    content:
-      "내용1\n\n" +
-      "이것은 긴 글 예시입니다. \n" +
-      "여러 줄로 이루어진 내용입니다.\n" +
-      "여기에는 여러 문장이 있습니다.\n" +
-      "내용이 길어짐에 따라 화면의 하단으로 넘어가게 됩니다.\n\n" +
-      "추가적으로 더 많은 내용이 추가될 수 있습니다.\n" +
-      "이제 페이지가 내려가게 되며, 긴 내용이 어떻게 처리되는지 확인할 수 있습니다.\n",
-    user: "username1",
-    time: "2025-01-06 12:34",
-    file: "파일1.pdf",
-  },
-  {
-    id: 2,
-    title: "글2-1",
-    content: "내용2",
-    user: "username2",
-    time: "2025-01-06 12:33",
-    file: "파일2.docx",
-  },
-  {
-    id: 3,
-    title: "글3-1",
-    content: "내용3",
-    user: "username3",
-    time: "2025-01-06 12:32",
-    file: "파일3.jpg",
-  },
-];
+// ※ dummyArticles는 제거(또는 주석)하고, 이제 companyPosts로부터 게시글을 찾을 예정
+// const dummyArticles = [ ... ];
 
 const dummyComments = [
   {
@@ -57,23 +26,74 @@ const dummyComments = [
 ];
 
 function Article() {
-  const { id } = useParams();
+  const { id } = useParams();       // URL 예: /Articles/75 → id = "75"
   const navigate = useNavigate();
+
   const [article, setArticle] = useState(null);
-  const [comments, setComments] = useState(dummyComments); // 댓글 상태 추가
-  const [newComment, setNewComment] = useState(""); // 새로운 댓글 입력 상태
+  const [companies, setCompanies] = useState([]);
+  const [companyPosts, setCompanyPosts] = useState({});
+  const [comments, setComments] = useState(dummyComments);
+  const [newComment, setNewComment] = useState("");
 
+  // 모든 회사 정보 + 해당 회사의 게시글들 가져오기
   useEffect(() => {
-    const foundArticle = dummyArticles.find(
-      (article) => article.id === parseInt(id)
-    );
-    if (foundArticle) {
-      setArticle(foundArticle);
-    } else {
-      navigate("/404");
-    }
-  }, [id, navigate]);
+    getAllCompanies();
+  }, []);
 
+  const getAllCompanies = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/companies");
+      const data = await response.json();
+      setCompanies(data);
+
+      // 각 회사별로 '모든 게시글'을 가져와서 companyPosts에 저장
+      data.forEach((company) => {
+        getPostsByCompany(company.companyNo);
+      });
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+    }
+  };
+
+  const getPostsByCompany = async (companyNo) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/companies/${companyNo}/all_posts`
+      );
+      const data = await response.json();
+      setCompanyPosts((prev) => ({
+        ...prev,
+        [companyNo]: data,
+      }));
+    } catch (error) {
+      console.error(`Error fetching posts for company ${companyNo}:`, error);
+    }
+  };
+
+  // companyPosts 갱신 시, 그 중에서 postNo가 URL의 :id와 같은 게시글을 찾는다
+  useEffect(() => {
+    // companyPosts 구조: { [companyNo]: [ { postNo, title, content, ...}, ... ], ... }
+    let foundPost = null;
+
+    // 모든 회사의 게시글 배열을 뒤져서 postNo === parseInt(id) 인 것 찾기
+    Object.values(companyPosts).forEach((posts) => {
+      if (!foundPost) {
+        const match = posts.find((p) => p.postNo === parseInt(id));
+        if (match) {
+          foundPost = match;
+        }
+      }
+    });
+
+    // 찾았다면 setArticle, 못 찾으면 null
+    if (foundPost) {
+      setArticle(foundPost);
+    } else {
+      setArticle(null);
+    }
+  }, [companyPosts, id]);
+
+  // 댓글 입력 핸들러
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
@@ -82,18 +102,37 @@ function Article() {
     if (newComment) {
       const newCommentObj = {
         id: comments.length + 1,
-        user: "currentUser", // 예시: 실제로는 로그인한 사용자로 변경
+        user: "currentUser",
         content: newComment,
         time: new Date().toISOString(),
       };
-      setComments([newCommentObj, ...comments]); // 새로운 댓글을 맨 앞에 추가
-      setNewComment(""); // 댓글 입력란 초기화
+      setComments([newCommentObj, ...comments]);
+      setNewComment("");
     }
   };
 
   if (!article) {
     return <div>게시글을 찾을 수 없습니다.</div>;
   }
+  
+  const formatTime = (createdAt) => {
+    const now = new Date();
+    const created = new Date(createdAt);
+    const diffInSeconds = Math.floor((now - created) / 1000);
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds}초 전`;
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes}분 전`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours}시간 전`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days}일 전`;
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -102,17 +141,23 @@ function Article() {
         <h2 style={styles.articleTitle}>{article.title}</h2>
         <p style={styles.articleContent}>{article.content}</p>
         <div style={styles.footer}>
-          {article.file && <div style={styles.file}>첨부파일: {article.file}</div>}
+          {/* 
+              서버에서 첨부파일 정보를 어떻게 넘기느냐에 따라 파일 필드가 다를 수 있음
+              예: article.filePath, article.attachments[0]?.fileName 등 
+          */}
+          {article.filePath && (
+            <div style={styles.file}>첨부파일: {article.filePath}</div>
+          )}
           <div style={styles.details}>
-            <span>{article.user}</span>
-            <span>{article.time}</span>
+            <span>{article.userName || "작성자"}</span>
+            <span>{formatTime(article.createdAt)}</span>
           </div>
         </div>
       </div>
 
       {/* 댓글 영역 */}
       <div style={styles.reply}>
-        <h1>댓글</h1>
+        <h2>댓글</h2>
         <div>
           <textarea
             value={newComment}
@@ -148,7 +193,6 @@ const styles = {
     margin: "40px auto",
     maxWidth: "1080px",
     width: "93%",
-    border: "1px solid black",
   },
   main: {
     position: "relative",
@@ -156,18 +200,21 @@ const styles = {
     borderBottom: "3px solid #ddd",
   },
   articleTitle: {
-    fontSize: "2rem",
+    marginTop:"0",
+    fontSize: "1.8rem",
     fontWeight: "bold",
-    marginBottom: "10px",
+    marginBottom: "30px",
+    marginLeft: "10px",
+    fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },
   articleContent: {
     fontSize: "1.1rem",
-    marginBottom: "20px",
+    marginBottom: "30px",
+    marginLeft: "10px",
+    whiteSpace: "pre-line", // 여러 줄 content 시 줄바꿈 보이도록
+    fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },
   footer: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
     fontSize: "0.9rem",
     color: "#888",
   },
@@ -176,7 +223,10 @@ const styles = {
   },
   details: {
     display: "flex",
-    gap: "30px",
+    justifyContent: "space-between",
+    marginLeft: "10px",
+    marginRight: "10px",
+    fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },
   reply: {
     marginTop: "50px",
@@ -204,6 +254,7 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
+    fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },
   commentList: {
     marginTop: "20px",
@@ -214,6 +265,7 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "8px",
     backgroundColor: "#fff",
+    fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },
   commentDetails: {
     marginTop: "10px",
@@ -221,6 +273,7 @@ const styles = {
     color: "#888",
     display: "flex",
     justifyContent: "space-between",
+    fontFamily: "Roboto, 'Noto Sans KR', sans-serif", 
   },
   "@media (max-width: 768px)": {
     container: {

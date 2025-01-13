@@ -95,7 +95,7 @@ public class PostController {
 
         // 4) 첨부파일 처리
         // 빈 파일이 넘어올 시 이름을 blob으로 처리하여 빈 파일 처리
-        if (file.getOriginalFilename() != "blob") {
+        if (file != null && !file.getOriginalFilename().equals("blob")) {
             try {
                 saveAttachment(file, savedPost);
             } catch (Exception e) {
@@ -204,6 +204,9 @@ public class PostController {
     private void saveAttachment(MultipartFile file, Post post) {
         try {
             String filePath = fileService.saveFile(file);
+            if (filePath == null || filePath.isEmpty()) {
+                throw new RuntimeException("파일 경로가 유효하지 않습니다.");
+            }
             // Builder 패턴을 사용하여 Attachment 객체 생성
             Attachment attachment = Attachment.builder()
                     .file_name(file.getOriginalFilename())

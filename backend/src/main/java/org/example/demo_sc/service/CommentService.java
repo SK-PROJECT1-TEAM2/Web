@@ -1,7 +1,7 @@
 package org.example.demo_sc.service;
 
-import org.example.demo_sc.dto.CommentDto; // 댓글 DTO 추가
-import org.example.demo_sc.entity.Comment;
+import org.example.demo_sc.dto.CommentDto;
+import org.example.demo_sc.entity.Comment; // Comment 클래스 임포트 추가
 import org.example.demo_sc.entity.Post;
 import org.example.demo_sc.entity.User;
 import org.example.demo_sc.repository.CommentRepository;
@@ -30,11 +30,7 @@ public class CommentService {
 
         // 댓글 목록 조회 후 DTO로 변환하여 반환
         return commentRepository.findAllByPost(post).stream()
-                .map(comment -> new CommentDto(
-                        comment.getComment(),
-                        comment.getUser().getUsername(), // 작성자 이름
-                        comment.getCreatedAt() // 작성 시간
-                ))
+                .map(CommentDto::new) // CommentDto의 생성자 사용
                 .collect(Collectors.toList());
     }
 

@@ -8,6 +8,7 @@ import org.example.demo_sc.entity.Post;
 import org.example.demo_sc.entity.User;
 import org.example.demo_sc.exception.UserNotFoundException;
 import org.example.demo_sc.repository.AttachmentRepository;
+import org.example.demo_sc.repository.CommentRepository;
 import org.example.demo_sc.repository.CompanyRepository;
 import org.example.demo_sc.repository.PostRepository;
 import org.example.demo_sc.repository.UserRepository;
@@ -23,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import org.springframework.ui.Model;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.example.demo_sc.entity.Comment;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -37,12 +40,13 @@ public class PostController {
     private final UserRepository userRepository;
     private final AttachmentRepository attachmentRepository;
     private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
 
     @Autowired
     // 생성자에서 의존성 주입
     public PostController(PostService postService, CompanyRepository companyRepository,
-                          PostRepository postRepository, FileService fileService, UserRepository userRepository,AttachmentRepository attachmentRepository,CommentService commentService) {
+                          PostRepository postRepository, FileService fileService, UserRepository userRepository,AttachmentRepository attachmentRepository,CommentService commentService, CommentRepository commentRepository) {
         this.postService = postService;
         this.companyRepository = companyRepository;
         this.postRepository = postRepository;
@@ -50,6 +54,7 @@ public class PostController {
         this.userRepository = userRepository;
         this.attachmentRepository = attachmentRepository;
         this.commentService = commentService;
+        this.commentRepository = commentRepository;
     }
 
     // 모든 게시글 조회
@@ -95,7 +100,7 @@ public class PostController {
 
         // 4) 첨부파일 처리
         // 빈 파일이 넘어올 시 이름을 blob으로 처리하여 빈 파일 처리
-        if (file.getOriginalFilename() != "blob") {
+        if (file != null && !file.getOriginalFilename().equals("blob")) {
             try {
                 saveAttachment(file, savedPost);
             } catch (Exception e) {
@@ -204,6 +209,9 @@ public class PostController {
     private void saveAttachment(MultipartFile file, Post post) {
         try {
             String filePath = fileService.saveFile(file);
+            if (filePath == null || filePath.isEmpty()) {
+                throw new RuntimeException("파일 경로가 유효하지 않습니다.");
+            }
             // Builder 패턴을 사용하여 Attachment 객체 생성
             Attachment attachment = Attachment.builder()
                     .file_name(file.getOriginalFilename())
@@ -215,6 +223,26 @@ public class PostController {
             attachmentRepository.save(attachment);
         } catch (Exception e) {
             throw new RuntimeException("Failed to save attachment: " + e.getMessage(), e);
+        }
+    }
+
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<?> getCommentsByPostId(@PathVariable Integer postId) {
+        try {
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + postId));
+
+            List<Comment> comments = commentRepository.findAllByPost(post);
+
+            // Comment -> CommentDto 변환
+            List<CommentDto> commentDtos = comments.stream()
+                    .map(CommentDto::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(commentDtos);
+        } catch (Exception e) {
+            e.printStackTrace(); // 디버깅을 위한 로그 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글을 가져오는 중 오류가 발생했습니다.");
         }
     }
 }

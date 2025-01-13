@@ -1,49 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-// ※ dummyArticles는 제거(또는 주석)하고, 이제 companyPosts로부터 게시글을 찾을 예정
-// const dummyArticles = [ ... ];
-
-const dummyComments = [
-  {
-    id: 1,
-    user: "commenter1",
-    content: "댓글 내용 1",
-    time: "2025-01-06 12:35",
-  },
-  {
-    id: 2,
-    user: "commenter2",
-    content: "댓글 내용 2",
-    time: "2025-01-06 12:36",
-  },
-  {
-    id: 3,
-    user: "commenter3",
-    content: "댓글 내용 3",
-    time: "2025-01-06 12:37",
-  },
-];
-
 function Article() {
-  const { id } = useParams();       // URL 예: /Articles/75 → id = "75"
+  const { id } = useParams(); // URL 예: /Articles/75 → id = "75"
   const navigate = useNavigate();
 
+  const [article, setArticle] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [companyPosts, setCompanyPosts] = useState({});
-  
-  const [article, setArticle] = useState(null);
-  const [comments, setComments] = useState(dummyComments);
+  const [comments, setComments] = useState([]); // 초기 상태를 빈 배열로 설정
   const [newComment, setNewComment] = useState("");
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [error, setError] = useState(null);     // 에러 상태 추가
 
   // 모든 회사 정보 + 해당 회사의 게시글들 가져오기
   useEffect(() => {
     getAllCompanies();
-  }, []);
+    fetchComments(id); // 댓글 데이터 가져오기
+  }, [id]);
 
   const getAllCompanies = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/companies");
+      if (!response.ok) throw new Error(`Failed to fetch companies: ${response.statusText}`);
       const data = await response.json();
       setCompanies(data);
 
@@ -53,6 +32,8 @@ function Article() {
       });
     } catch (error) {
       console.error("Error fetching companies:", error);
+      setError("회사를 불러오는 데 실패했습니다.");
+      setLoading(false);
     }
   };
 
@@ -61,6 +42,7 @@ function Article() {
       const response = await fetch(
         `http://localhost:8080/api/companies/${companyNo}/all_posts`
       );
+      if (!response.ok) throw new Error(`Failed to fetch posts for company ${companyNo}: ${response.statusText}`);
       const data = await response.json();
       setCompanyPosts((prev) => ({
         ...prev,
@@ -68,8 +50,30 @@ function Article() {
       }));
     } catch (error) {
       console.error(`Error fetching posts for company ${companyNo}:`, error);
+      setError("게시글을 불러오는 중 오류가 발생했습니다.");
+      setLoading(false);
     }
   };
+
+  // 댓글 데이터 가져오기
+  const fetchComments = async (id) => { 
+    try { 
+      const response = await fetch(`http://localhost:8080/api/articles/${id}/comments`); 
+      if (!response.ok) throw new Error(`Failed to fetch comments: ${response.statusText}`); 
+      const data = await response.json(); 
+      
+      // 댓글을 시간의 역순으로 정렬 (최신 댓글이 먼저)
+      const sortedComments = [...data].sort((a, b) => new Date(b.time) - new Date(a.time));
+      
+      setComments(sortedComments); 
+      console.log("Comments:", sortedComments); // 댓글 상태 업데이트 및 데이터 확인
+    } catch (error) { 
+      console.error(`Error fetching comments: ${error}`);
+      setError("댓글을 불러오는 데 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // companyPosts 갱신 시, 그 중에서 postNo가 URL의 :id와 같은 게시글을 찾는다
   useEffect(() => {
@@ -99,23 +103,42 @@ function Article() {
     setNewComment(e.target.value);
   };
 
-  const handleCommentSubmit = () => {
-    if (newComment) {
-      const newCommentObj = {
-        id: comments.length + 1,
-        user: "currentUser",
-        content: newComment,
-        time: new Date().toISOString(),
-      };
-      setComments([newCommentObj, ...comments]);
+  console.log("Article Object:", article); // 추가된 로그
+  console.log("Company Posts:", companyPosts);
+
+  // 댓글 제출 핸들러 수정: 백엔드와 연동하여 댓글을 추가
+  const handleCommentSubmit = async () => {
+    if (newComment.trim() === "") {
+      alert("댓글을 입력하세요.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token'); // JWT 사용 시
+      const response = await fetch(`http://localhost:8080/api/articles/${id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // JWT 포함
+        },
+        body: JSON.stringify({ comment: newComment }),
+      });
+
+      if (!response.ok) throw new Error(`Failed to submit comment: ${response.statusText}`);
+
+      const newCommentData = await response.json();
+      setComments([newCommentData, ...comments]); // 새로운 댓글을 리스트의 맨 앞에 추가
       setNewComment("");
+    } catch (error) {
+      console.error(`Error submitting comment: ${error}`);
+      alert("댓글을 등록하는 중 오류가 발생했습니다.");
     }
   };
 
   if (!article) {
     return <div>게시글을 찾을 수 없습니다.</div>;
   }
-  
+
   const formatTime = (createdAt) => {
     const now = new Date();
     const created = new Date(createdAt);
@@ -142,10 +165,6 @@ function Article() {
         <h2 style={styles.articleTitle}>{article.title}</h2>
         <p style={styles.articleContent}>{article.content}</p>
         <div style={styles.footer}>
-          {/* 
-              서버에서 첨부파일 정보를 어떻게 넘기느냐에 따라 파일 필드가 다를 수 있음
-              예: article.filePath, article.attachments[0]?.fileName 등 
-          */}
           {article.filePath && (
             <div style={styles.file}>첨부파일: {article.filePath}</div>
           )}
@@ -173,15 +192,23 @@ function Article() {
 
         {/* 댓글 리스트 */}
         <div style={styles.commentList}>
-          {comments.map((comment) => (
-            <div key={comment.id} style={styles.comment}>
-              <p>{comment.content}</p>
-              <div style={styles.commentDetails}>
-                <span>{comment.user}</span>
-                <span>{comment.time}</span>
+          {loading ? (
+            <div>댓글을 불러오는 중...</div>
+          ) : error ? (
+            <div>{error}</div>
+          ) : comments.length === 0 ? (
+            <div>댓글이 없습니다.</div>
+          ) : (
+            comments.map((comment) => (
+              <div key={comment.id} style={styles.comment}>
+                <p>{comment.comment}</p>
+                <div style={styles.commentDetails}>
+                  <span>{comment.username}</span>
+                  <span>{formatTime(comment.time)}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -231,6 +258,7 @@ const styles = {
   },
   reply: {
     marginTop: "50px",
+    paddingTop: "0px",
     padding: "20px",
     border: "1px solid #ddd",
     borderRadius: "8px",
@@ -249,7 +277,7 @@ const styles = {
   },
   commentButton: {
     padding: "10px 20px",
-    marginBottom: "50px",
+    marginBottom: "10px",
     backgroundColor: "#4CAF50",
     color: "#fff",
     border: "none",
@@ -263,6 +291,7 @@ const styles = {
   comment: {
     marginBottom: "15px",
     padding: "10px",
+    paddingTop: "0",
     border: "1px solid #ddd",
     borderRadius: "8px",
     backgroundColor: "#fff",

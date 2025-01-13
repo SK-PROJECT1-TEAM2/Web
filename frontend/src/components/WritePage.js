@@ -46,6 +46,8 @@ function WritePage() {
     // 파일이 있으면 추가
     if (file) {
       formDataToSend.append("file", file);
+    } else {
+      formDataToSend.append("file", new Blob()); // 빈 Blob 객체 추가
     }
 
     // 2) Axios POST 요청

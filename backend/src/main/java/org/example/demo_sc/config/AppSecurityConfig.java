@@ -19,33 +19,38 @@ public class AppSecurityConfig {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and()
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/signup", "/signup_process", "/css/**", "/js/**", "/api/articles").permitAll()
-                        .requestMatchers("/mypage", "/write-post", "/api/articles/**", "/board", "/company/**").authenticated()
-                        .anyRequest().permitAll()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                        .successHandler((request, response, authentication) -> {
-                            response.setContentType("application/json");
-                            String jsonResponse = "Login Success";
-                            response.getWriter().write(jsonResponse);
-                        })
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)
-                )
-                .csrf(csrf -> csrf.disable());
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.cors().and()
+            .authorizeHttpRequests(auth -> auth
+                    // 댓글 엔드포인트는 인증 없이 접근 허용
+                    .requestMatchers("/api/articles/*/comments").permitAll()
+                    // 로그인, 회원가입 등 다른 경로는 인증 없이 접근 허용
+                    .requestMatchers("/login", "/signup", "/signup_process", "/css/**", "/js/**", "/api/articles").permitAll()
+                    // 그 외 특정 경로는 인증 필요
+                    .requestMatchers("/mypage", "/write-post", "/api/articles/**", "/board", "/company/**").authenticated()
+                    // 나머지 모든 요청은 인증 없이 허용
+                    .anyRequest().permitAll()
+            )
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/", true)
+                    .failureUrl("/login?error=true")
+                    .permitAll()
+                    .successHandler((request, response, authentication) -> {
+                        response.setContentType("application/json");
+                        String jsonResponse = "Login Success";
+                        response.getWriter().write(jsonResponse);
+                    })
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login")
+                    .invalidateHttpSession(true)
+            )
+            .csrf(csrf -> csrf.disable());
 
-        return http.build();
-    }
+    return http.build();
+}
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
